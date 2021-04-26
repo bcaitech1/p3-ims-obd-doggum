@@ -6,7 +6,7 @@ class FCN8s(nn.Module):
     Base Model : VGG16
     """
     def __init__(self, num_classes=12):
-        super(FCN8s, self).__init__())
+        super(FCN8s, self).__init__()
         
         self.relu = nn.ReLU(inplace=True)
         self.drop = nn.Dropout2d()
@@ -46,56 +46,58 @@ class FCN8s(nn.Module):
         self.upscore_pool4 = nn.ConvTranspose2d(num_classes, num_classes, 4, stride=2, bias=False)
         
     def forward(self, x):
-        x = self.relu(self.conv1_1(x))
-        x = self.relu(self.conv1_2(x))
-        x = self.pool1(x)
+        h = x
+        h = self.relu(self.conv1_1(h))
+        h = self.relu(self.conv1_2(h))
+        h = self.pool1(h)
         
-        x = self.relu(self.conv2_1(x))
-        x = self.relu(self.conv2_2(x))
-        x = self.pool2(x)
+        h = self.relu(self.conv2_1(h))
+        h = self.relu(self.conv2_2(h))
+        h = self.pool2(h)
 
-        x = self.relu(self.conv3_1(x))
-        x = self.relu(self.conv3_2(x))
-        x = self.relu(self.conv3_3(x))
-        x = self.pool3(x)
-        pool3 = x
+        h = self.relu(self.conv3_1(h))
+        h = self.relu(self.conv3_2(h))
+        h = self.relu(self.conv3_3(h))
+        h = self.pool3(h)
+        pool3 = h
 
-        x = self.relu(self.conv4_1(x))
-        x = self.relu(self.conv4_2(x))
-        x = self.relu(self.conv4_3(x))
-        x = self.pool4(x)
-        pool4 = x
+        h = self.relu(self.conv4_1(h))
+        h = self.relu(self.conv4_2(h))
+        h = self.relu(self.conv4_3(h))
+        h = self.pool4(h)
+        pool4 = h
 
-        x = self.relu(self.conv5_1(x))
-        x = self.relu(self.conv5_2(x))
-        x = self.relu(self.conv5_3(x))
-        x = self.pool5(x)
+        h = self.relu(self.conv5_1(h))
+        h = self.relu(self.conv5_2(h))
+        h = self.relu(self.conv5_3(h))
+        h = self.pool5(h)
 
-        x = self.relu(self.fc6(x))
-        x = self.drop(x)
+        h = self.relu(self.fc6(h))
+        h = self.drop(h)
 
-        x = self.relu(self.fc7(x))
-        x = self.drop(x)
+        h = self.relu(self.fc7(h))
+        h = self.drop(h)
 
-        x = self.score_fr(x)
-        x = self.upscore2(x)
-        upscore2 = x
+        h = self.score_fr(h)
+        h = self.upscore2(h)
+        upscore2 = h
 
-        x = self.score_pool4(pool4 * 0.01)
-        x = x[:, :, 5:5 + upscore2.size()[2], 5:5 + upscore2.size()[3]]
-        score_pool4c = x
+        h = self.score_pool4(pool4)
+        h = h[:, :, 5:5 + upscore2.size()[2], 5:5 + upscore2.size()[3]]
+        score_pool4c = h
+        h = upscore2 + score_pool4c
+        h = self.upscore_pool4(h)
+        upscore_pool4 = h
 
-        x = upscore2 + score_pool4c
-        x = self.upscore_pool4(x)
-        upscore_pool4 = x
+        h = self.score_pool3(pool3)
+        h = h[:, :, 9:9+upscore_pool4.size()[2], 9:9+upscore_pool4.size()[3]]
+        score_pool3c = h
 
-        x = self.score_pool3(pool3 * 0.0001)
-        x = x[:, :, 9:9+upscore_pool4.size()[2], 9:9+upscore_pool4.size()[3]]
-        score_pool3c = x
+        h = upscore_pool4 + score_pool3c
 
-        x = upscore_pool4 + score_pool3c
-
-        x = sef.upscore8(x)
-        x = x[:, :, 31:31 + x.size()[2], 31:31 + x.size()[3]].contiguous()
+        h = self.upscore8(h)
+        h = h[:, :, 31:31 + x.size()[2], 31:31 + x.size()[3]].contiguous()
+        
+        return h
       
                                   
