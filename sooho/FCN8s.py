@@ -90,9 +90,7 @@ class FCN8s(nn.Module):
         upscore_pool4 = x
 
         x = self.score_pool3(pool3 * 0.0001)
-        x = x[:, :,
-              9:9+upscore_pool4.size()[2],
-              9:9+upscore_pool4.size()[3]]
+        x = x[:, :, 9:9+upscore_pool4.size()[2], 9:9+upscore_pool4.size()[3]]
         score_pool3c = x
 
         x = upscore_pool4 + score_pool3c
