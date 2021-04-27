@@ -109,7 +109,7 @@ model.load_state_dict(model_dict)
 classifier = DilatedNet_classifier()
 
 # DilatedNetFront
-model = DilatedNetFront(model2, classifier)
+model = DilatedNetFront(model, classifier)
 
 # 임의의 x값 넣어서 shape 확인
 x = torch.randn([1, 3, 512, 512])
