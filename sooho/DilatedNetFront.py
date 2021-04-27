@@ -100,6 +100,7 @@ model = VGG16(num_classes=12)
 # weight 불러오기와서 model에 weight를 입력
 model_dict = model.state_dict()
 pretrained_model = vgg16(pretrained = True)
+pretrained_dict = pretrained_model.state_dict()
 pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
 model_dict.update(pretrained_dict)
 model.load_state_dict(model_dict)
