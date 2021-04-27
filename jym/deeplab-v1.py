@@ -43,7 +43,7 @@ class VGG16(nn.Module):
                                        conv_relu(512, 512, 3, rate = 2),
                                        conv_relu(512, 512, 3, rate = 2),
                                        nn.MaxPool2d(3, stride = 1, padding = 1),
-                                       nn.MaxPool2d(3, stride = 1, padding = 1))
+                                       nn.AvgPool2d(3, stride = 1, padding = 1))
         
         
         
