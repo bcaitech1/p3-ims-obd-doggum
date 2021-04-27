@@ -1,4 +1,4 @@
-'''
+###
 git init
 git clone https://github.com/bcaitech1/p3-ims-obd-doggum.git
 
@@ -18,4 +18,6 @@ git push origin <branch_name>
 compare & pull request 클릭
 pr(pull request)에 대한 메시지를 입력하고 create pull request 클릭
 팀원끼리 코드리뷰 후 merge 
-'''
+
+###
+
