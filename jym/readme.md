@@ -1,6 +1,10 @@
 ```
 git init
+
+(깃허브 메인에 있는 모든 폴더와 파일이 현재 로컬 폴더에 저장됩니다.)
 git clone https://github.com/bcaitech1/p3-ims-obd-doggum.git
+(선택한 브랜치에 있는 폴더와 파일만 현재 로컬 폴더에 저장됩니다.)
+git clone -b <branch name> https://github.com/bcaitech1/p3-ims-obd-doggum.git
 
 (branch가 존재하지 않으면)
 git checkout -b <branch_name> 
