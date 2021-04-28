@@ -5,41 +5,34 @@ class VGG16(nn.Module):
     def __init__(self, num_classes=12):
         super(VGG16, self).__init__()
         
-        self.features1 = nn.Sequential(
+        self.features = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(), 
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(), 
-            nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
-        )
-        self.features2 = nn.Sequential(
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
+            
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
-        )
-
-        self.features3 = nn.Sequential(
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
+            
             nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, stride=1, padding=1, dilation=1), 
             nn.ReLU(),
             nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
-        )
-
-        self.features4 = nn.Sequential(
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
+            
             nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, dilation=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, dilation=1),
-            nn.ReLU()
-        )
-
-        self.features5 = nn.Sequential(
+            nn.ReLU(),
+       
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=2, dilation=2),
             nn.ReLU(),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=2, dilation=2),
@@ -49,11 +42,7 @@ class VGG16(nn.Module):
         )
     
     def forward(self, x):
-        x = self.features1(x)
-        x = self.features2(x)
-        x = self.features3(x)
-        x = self.features4(x)
-        x = self.features5(x)
+        x = self.features(x)
         return x
 
 class DilatedNet_classifier(nn.Module):
@@ -145,9 +134,21 @@ model = VGG16(num_classes=12)
 #weight 불러오기
 model_dict = model.state_dict()
 pretrained_model = vgg16(pretrained = True)
-pretrained_dict = pretrained_model.state_dict()
-pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-model_dict.update(pretrained_dict)
+pretrained_model_dict = pretrained_model.state_dict()
+
+key = ['features.24.weight', 'features.24.bias', 'features.26.weight','features.26.bias','features.28.weight','features.28.bias']
+new_pretrained_model_dict = {}
+for k, v in pretrained_model_dict.items():
+    if k in key:
+        if k.split('.')[-1] == 'weight':
+            number = int(k.split('.')[1])-1
+            k = f'features.{number}.weight'
+        else:
+            number = int(k.split('.')[1])-1
+            k = f'features.{number}.bias'
+    new_pretrained_model_dict[k] = v
+pretrained_model_dict = {k: v for k, v in new_pretrained_model_dict.items() if k in model_dict}
+model_dict.update(pretrained_model_dict)
 model.load_state_dict(model_dict)
 
 # classifier
