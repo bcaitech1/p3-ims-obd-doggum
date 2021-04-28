@@ -123,7 +123,7 @@ class BasicContextModule(nn.Module):
         )
         # no Truncation 여기 padding=1하면 528로 사이즈 커져서 0으로 넣어줘야 하는 것 같습니다.
         self.layer8 = nn.Sequential(
-            nn.Conv2d(in_channels=num_classes, out_channels=num_classes, kernel_size=1, stride=1, padding=0, dilation=1)
+            nn.Conv2d(in_channels=num_classes, out_channels=num_classes, kernel_size=1, stride=1)
         )
     def forward(self, x):
         x = self.layer1(x)
