@@ -42,10 +42,7 @@ class VGG16(nn.Module):
 
         
     def forward(self, x):
-        '''
-        [TODO]
-
-        '''
+        
         x = self.conv1_1(x)
         x = self.conv1_2(x)
         x = self.maxpool1(x)
@@ -75,42 +72,43 @@ class VGG16(nn.Module):
 class ASPP(nn.Module):
     def __init__(self, in_channels, out_channels=1024, num_classes=21):
         super(ASPP, self).__init__()
-        '''
-        [TODO]
-
-        ''' 
+        
         self.fc6_6 = conv3x3_relu(in_channels, in_channels, rate=6)
+        self.fc7_6 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.fc8_6 = nn.Conv2d(out_channels, out_channels, kernel_size=1)
+        
         self.fc6_12 = conv3x3_relu(in_channels, in_channels, rate=12)
+        self.fc7_12 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.fc8_12 = nn.Conv2d(out_channels, out_channels, kernel_size=1)
+        
         self.fc6_18 = conv3x3_relu(in_channels, in_channels, rate=18)
+        self.fc7_18 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.fc8_18 = nn.Conv2d(out_channels, out_channels, kernel_size=1)
+        
         self.fc6_24 = conv3x3_relu(in_channels, in_channels, rate=24)
-        
-        self.fc7 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
-        
-        self.fc8 = nn.Conv2d(out_channels, out_channels, kernel_size=1)
+        self.fc7_24 = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.fc8_24 = nn.Conv2d(out_channels, out_channels, kernel_size=1)
         
         self.out_1 = nn.Conv2d(out_channels * 4, out_channels, kernel_size=1)
         self.out_2 = nn.Conv2d(out_channels, num_classes, kernel_size=1)
 
     def forward(self, x):
-        '''
-        [TODO]
-
-        '''
+        
         x1 = self.fc6_6(x)
-        x1 = self.fc7(x1)
-        x1 = self.fc8(x1)
+        x1 = self.fc7_6(x1)
+        x1 = self.fc8_6(x1)
         
         x2 = self.fc6_12(x)
-        x2 = self.fc7(x2)
-        x2 = self.fc8(x2)
+        x2 = self.fc7_12(x2)
+        x2 = self.fc8_12(x2)
         
         x3 = self.fc6_18(x)
-        x3 = self.fc7(x3)
-        x3 = self.fc8(x3)
+        x3 = self.fc7_18(x3)
+        x3 = self.fc8_18(x3)
         
         x4 = self.fc6_24(x)
-        x4 = self.fc7(x4)
-        x4 = self.fc8(x4)
+        x4 = self.fc7_24(x4)
+        x4 = self.fc8_24(x4)
         
         x = torch.cat((x1, x2, x3, x4), dim=1)
         
@@ -124,19 +122,13 @@ class DeepLabV2(nn.Module):
     ## VGG 위에 ASPP 쌓기
     def __init__(self, backbone, classifier, upsampling=8):
         super(DeepLabV2, self).__init__()
-        '''
-        [TODO]
-
-        ''' 
+        
         self.backbone = backbone
         self.classifier = classifier
         self.upsampling = upsampling
 
     def forward(self, x):
-        '''
-        [TODO]
-
-        '''
+        
         x = self.backbone(x)
         x = self.classifier(x)
         
@@ -145,3 +137,16 @@ class DeepLabV2(nn.Module):
         out = F.interpolate(x, size=(feature_map_h * self.upsampling, feature_map_w * self.upsampling), mode="bilinear")
         
         return out
+
+
+# 구현된 model에 임의의 input을 넣어 output이 잘 나오는지 test
+backbone = VGG16()
+aspp_module = ASPP(in_channels=512, out_channels=256, num_classes=12)
+model = DeepLabV2(backbone=backbone, classifier=aspp_module)
+
+x = torch.randn([1, 3, 512, 512])
+print("input shape : ", x.shape)
+out = model(x).to(device)
+print("output shape : ", out.size())
+
+model = model.to(device)
