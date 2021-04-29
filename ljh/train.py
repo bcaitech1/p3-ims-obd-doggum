@@ -6,6 +6,7 @@ def save_model(model, saved_dir, file_name='fcn8s_best_model(pretrained).pt'):
     check_point = {'net': model.state_dict()}
     output_path = os.path.join(saved_dir, file_name)
     torch.save(model.state_dict(), output_path)
+    #주석
 
 def validation(epoch, model, data_loader, criterion, device):
     print('Start validation #{}'.format(epoch))
