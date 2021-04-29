@@ -154,8 +154,6 @@ def main():
     model.eval()
     showImageMask(test_loader, list(sorted_df.Categories), test=True, model=model, device=device)
 
-    test(model, test_loader, device)
-
     # sample_submisson.csv 열기
     submission = pd.read_csv('./submission/sample_submission.csv', index_col=None)
 
@@ -246,9 +244,6 @@ def validation(epoch, model, data_loader, criterion, device):
 
 
 def test(model, data_loader, device):
-    for imgs, image_infos in data_loader:
-        temp_images = imgs
-        break
     size = 256
     transform = TestAugmentation()
     print('Start prediction.')
@@ -266,7 +261,7 @@ def test(model, data_loader, device):
 
             # resize (256 x 256)
             temp_mask = []
-            for img, mask in zip(np.stack(temp_images), oms):
+            for img, mask in zip(np.stack(imgs), oms):
                 transformed = transform(image=img, mask=mask)
                 mask = transformed['mask']
                 temp_mask.append(mask)
