@@ -69,3 +69,11 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Save model in', saved_dir)
                 best_loss = avrg_loss
                 save_model(model, saved_dir)
+
+# from models.hrnet import get_seg_model
+# from models.config import _C as cfg
+# model = get_seg_model(cfg)
+from models.hrnet_base import hrnet32
+
+model = hrnet32(pretrained=True)
+print(model)
