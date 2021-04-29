@@ -234,7 +234,7 @@ def validation(epoch, model, data_loader, criterion, device):
             total_loss += loss
             cnt += 1
 
-            outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
+            outputs = torch.argmax(outputs, dim=1).detach().cpu().numpy()
 
             mIoU = label_accuracy_score(masks.detach().cpu().numpy(), outputs, n_class=12)[2]
             mIoU_list.append(mIoU)
