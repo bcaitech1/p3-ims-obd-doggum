@@ -140,7 +140,7 @@ def main():
     criterion = get_loss(args)
     optimizer = get_optimizer(args, model)
 
-    # train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
+    train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
 
 
     # best model 저장된 경로
@@ -151,7 +151,7 @@ def main():
     model.load_state_dict(checkpoint)
 
     # 추론을 실행하기 전에는 반드시 설정 (batch normalization, dropout 를 평가 모드로 설정)
-    # model.eval()
+    model.eval()
     showImageMask(test_loader, list(sorted_df.Categories), test=True, model=model, device=device)
 
     test(model, test_loader, device)
