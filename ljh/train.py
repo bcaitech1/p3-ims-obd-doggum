@@ -5,6 +5,7 @@ from utils import validation
 from tqdm import tqdm
 from dataset import get_datasets
 import segmentation_models_pytorch as smp
+import wandb
 
 def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name):
     print('Start training..')
@@ -45,6 +46,13 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Save model in', saved_dir)
                 best_mIoU = avrg_mIoU
                 save_model(model, saved_dir, file_name)
+            wandb.log({ "Train loss":loss.item(),
+                       "Valid loss":avrg_loss,
+                       "Valid mIoU":avrg_mIoU})
+
+
+wandb.init(project="stage3-semantic-segmentation")
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 val_every = 1
@@ -54,6 +62,19 @@ learning_rate = 0.0001
 encoder_name = "efficientnet-b3"
 saved_dir = "./saved/"+"DeepLabV3Plus/"+encoder_name
 train_loader, val_loader, test_loader = get_datasets(batch_size)
+
+cfg = {"model":"deeplabv3plus_"+encoder_name,
+       "batch_size":batch_size,
+       "num_epochs":num_epochs,
+       "learning_rate":learning_rate,
+       "loss":"CE",
+       "opt":"ADAM",
+       "Weight_decay":1e-6,
+       "valid":"default"}
+
+wandb.config.update(cfg)
+wandb.run.name = 'deeplabv3_first'
+wandb.run.save()
 
 model = smp.DeepLabV3Plus(encoder_name=encoder_name, classes=12, encoder_weights="imagenet", activation=None)
 model = model.to(device)
