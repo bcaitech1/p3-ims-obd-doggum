@@ -1,14 +1,4 @@
-# ------------------------------------------------------------------------------
-# Copyright (c) Microsoft
-# Licensed under the MIT License.
-# Written by Ke Sun (sunk@mail.ustc.edu.cn)
-# ------------------------------------------------------------------------------
-# https://github.com/HRNet/HRNet-Semantic-Segmentation/blob/HRNet-OCR/lib/models/seg_hrnet.py
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
+# Imports
 import os
 import logging
 import functools
@@ -20,11 +10,14 @@ import torch.nn as nn
 import torch._utils
 import torch.nn.functional as F
 
-from .bn_helper import BatchNorm2d, BatchNorm2d_class, relu_inplace
+# Model code
+# taken from https://github.com/HRNet/HRNet-Semantic-Segmentation/blob/master/lib/models/seg_hrnet.py
+# modified little bit to integrate dict configuration
 
-BN_MOMENTUM = 0.1
-ALIGN_CORNERS = None
+# changed batchnorm from sycBatchNorm to nn.BatchNorm2d for kaggle kernels
+BatchNorm2d = nn.BatchNorm2d
 
+BN_MOMENTUM = 0.01
 logger = logging.getLogger(__name__)
 
 
@@ -41,7 +34,7 @@ class BasicBlock(nn.Module):
         super(BasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = BatchNorm2d(planes, momentum=BN_MOMENTUM)
-        self.relu = nn.ReLU(inplace=relu_inplace)
+        self.relu = nn.ReLU(inplace=False)
         self.conv2 = conv3x3(planes, planes)
         self.bn2 = BatchNorm2d(planes, momentum=BN_MOMENTUM)
         self.downsample = downsample
@@ -80,7 +73,7 @@ class Bottleneck(nn.Module):
                                bias=False)
         self.bn3 = BatchNorm2d(planes * self.expansion,
                                momentum=BN_MOMENTUM)
-        self.relu = nn.ReLU(inplace=relu_inplace)
+        self.relu = nn.ReLU(inplace=False)
         self.downsample = downsample
         self.stride = stride
 
@@ -123,7 +116,7 @@ class HighResolutionModule(nn.Module):
         self.branches = self._make_branches(
             num_branches, blocks, num_blocks, num_channels)
         self.fuse_layers = self._make_fuse_layers()
-        self.relu = nn.ReLU(inplace=relu_inplace)
+        self.relu = nn.ReLU(inplace=False)
 
     def _check_branches(self, num_branches, blocks, num_blocks,
                         num_inchannels, num_channels):
@@ -218,7 +211,7 @@ class HighResolutionModule(nn.Module):
                                           3, 2, 1, bias=False),
                                 BatchNorm2d(num_outchannels_conv3x3,
                                             momentum=BN_MOMENTUM),
-                                nn.ReLU(inplace=relu_inplace)))
+                                nn.ReLU(inplace=False)))
                     fuse_layer.append(nn.Sequential(*conv3x3s))
             fuse_layers.append(nn.ModuleList(fuse_layer))
 
@@ -246,7 +239,7 @@ class HighResolutionModule(nn.Module):
                     y = y + F.interpolate(
                         self.fuse_layers[i][j](x[j]),
                         size=[height_output, width_output],
-                        mode='bilinear', align_corners=ALIGN_CORNERS)
+                        mode='bilinear')
                 else:
                     y = y + self.fuse_layers[i][j](x[j])
             x_fuse.append(self.relu(y))
@@ -263,19 +256,18 @@ blocks_dict = {
 class HighResolutionNet(nn.Module):
 
     def __init__(self, config, **kwargs):
-        global ALIGN_CORNERS
-        extra = config.MODEL.EXTRA
+        # extra = config.MODEL.EXTRA
+        extra = config['MODEL']['EXTRA']
         super(HighResolutionNet, self).__init__()
-        ALIGN_CORNERS = config.MODEL.ALIGN_CORNERS
 
         # stem net
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1,
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1,
                                bias=False)
         self.bn1 = BatchNorm2d(64, momentum=BN_MOMENTUM)
-        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1,
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1,
                                bias=False)
         self.bn2 = BatchNorm2d(64, momentum=BN_MOMENTUM)
-        self.relu = nn.ReLU(inplace=relu_inplace)
+        self.relu = nn.ReLU(inplace=False)
 
         self.stage1_cfg = extra['STAGE1']
         num_channels = self.stage1_cfg['NUM_CHANNELS'][0]
@@ -324,13 +316,13 @@ class HighResolutionNet(nn.Module):
                 stride=1,
                 padding=0),
             BatchNorm2d(last_inp_channels, momentum=BN_MOMENTUM),
-            nn.ReLU(inplace=relu_inplace),
+            nn.ReLU(inplace=False),
             nn.Conv2d(
                 in_channels=last_inp_channels,
-                out_channels=config.DATASET.NUM_CLASSES,
-                kernel_size=extra.FINAL_CONV_KERNEL,
+                out_channels=config['NUM_CLASSES'],
+                kernel_size=extra['FINAL_CONV_KERNEL'],
                 stride=1,
-                padding=1 if extra.FINAL_CONV_KERNEL == 3 else 0)
+                padding=1 if extra['FINAL_CONV_KERNEL'] == 3 else 0)
         )
 
     def _make_transition_layer(
@@ -351,7 +343,7 @@ class HighResolutionNet(nn.Module):
                                   bias=False),
                         BatchNorm2d(
                             num_channels_cur_layer[i], momentum=BN_MOMENTUM),
-                        nn.ReLU(inplace=relu_inplace)))
+                        nn.ReLU(inplace=False)))
                 else:
                     transition_layers.append(None)
             else:
@@ -364,7 +356,7 @@ class HighResolutionNet(nn.Module):
                         nn.Conv2d(
                             inchannels, outchannels, 3, 2, 1, bias=False),
                         BatchNorm2d(outchannels, momentum=BN_MOMENTUM),
-                        nn.ReLU(inplace=relu_inplace)))
+                        nn.ReLU(inplace=False)))
                 transition_layers.append(nn.Sequential(*conv3x3s))
 
         return nn.ModuleList(transition_layers)
@@ -422,8 +414,10 @@ class HighResolutionNet(nn.Module):
         x = self.conv2(x)
         x = self.bn2(x)
         x = self.relu(x)
-        x = self.layer1(x)
 
+        # print(x.shape)
+        x = self.layer1(x)
+        # print(x.shape)
         x_list = []
         for i in range(self.stage2_cfg['NUM_BRANCHES']):
             if self.transition1[i] is not None:
@@ -453,12 +447,14 @@ class HighResolutionNet(nn.Module):
             else:
                 x_list.append(y_list[i])
         x = self.stage4(x_list)
-
+        # print(x.shape)
         # Upsampling
         x0_h, x0_w = x[0].size(2), x[0].size(3)
-        x1 = F.interpolate(x[1], size=(x0_h, x0_w), mode='bilinear', align_corners=ALIGN_CORNERS)
-        x2 = F.interpolate(x[2], size=(x0_h, x0_w), mode='bilinear', align_corners=ALIGN_CORNERS)
-        x3 = F.interpolate(x[3], size=(x0_h, x0_w), mode='bilinear', align_corners=ALIGN_CORNERS)
+        # x0_h, x0_w = x0_h* 4, x0_w * 2
+        # print(x0_h, x0_w)
+        x1 = F.upsample(x[1], size=(x0_h, x0_w), mode='bilinear')
+        x2 = F.upsample(x[2], size=(x0_h, x0_w), mode='bilinear')
+        x3 = F.upsample(x[3], size=(x0_h, x0_w), mode='bilinear')
 
         x = torch.cat([x[0], x1, x2, x3], 1)
 
@@ -471,10 +467,10 @@ class HighResolutionNet(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.normal_(m.weight, std=0.001)
-            elif isinstance(m, BatchNorm2d_class):
+            elif isinstance(m, nn.BatchNorm2d):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
-        if os.path.isfile(pretrained):
+        if pretrained:
             pretrained_dict = torch.load(pretrained)
             logger.info('=> loading pretrained model {}'.format(pretrained))
             model_dict = self.state_dict()
@@ -486,9 +482,43 @@ class HighResolutionNet(nn.Module):
             model_dict.update(pretrained_dict)
             self.load_state_dict(model_dict)
 
-
-def get_seg_model(cfg, **kwargs):
+def get_seg_model(**kwargs):
+    config = {}
+    config['NUM_CLASSES'] = 12
+    config['PRETRAINED'] = None
+    config['MODEL'] = {'EXTRA': {'FINAL_CONV_KERNEL': 1,
+                                 'STAGE1': {'BLOCK': 'BOTTLENECK',
+                                            'FUSE_METHOD': 'SUM',
+                                            'NUM_BLOCKS': [1],
+                                            'NUM_CHANNELS': [32],
+                                            'NUM_MODULES': 1,
+                                            'NUM_RANCHES': 1
+                                            },
+                                 'STAGE2': {'BLOCK': 'BASIC',
+                                            'FUSE_METHOD': 'SUM',
+                                            'NUM_BLOCKS': [2, 2],
+                                            'NUM_BRANCHES': 2,
+                                            'NUM_CHANNELS': [16, 32],
+                                            'NUM_MODULES': 1
+                                            },
+                                 'STAGE3': {'BLOCK': 'BASIC',
+                                            'FUSE_METHOD': 'SUM',
+                                            'NUM_BLOCKS': [2, 2, 2],
+                                            'NUM_BRANCHES': 3,
+                                            'NUM_CHANNELS': [16, 32, 64],
+                                            'NUM_MODULES': 1
+                                            },
+                                 'STAGE4': {'BLOCK': 'BASIC',
+                                            'FUSE_METHOD': 'SUM',
+                                            'NUM_BLOCKS': [2, 2, 2, 2],
+                                            'NUM_BRANCHES': 4,
+                                            'NUM_CHANNELS': [16, 32, 64, 128],
+                                            'NUM_MODULES': 1
+                                            }}}
+    cfg = config
     model = HighResolutionNet(cfg, **kwargs)
-    model.init_weights(cfg.MODEL.PRETRAINED)
+    model.init_weights(cfg['PRETRAINED'])
 
     return model
+
+
