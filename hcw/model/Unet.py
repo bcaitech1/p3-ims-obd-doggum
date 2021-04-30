@@ -26,69 +26,69 @@ class UNet(nn.Module):
         
         # Contracting path
         # Encoder 1
-        self.enc1_1 = CBR2d(1, 64, 3, 1, 0, bias=True)
-        self.enc1_2 = CBR2d(64, 64, 3, 1, 0, bias=True)
+        self.enc1_1 = CBR2d(3, 64, 3, 1, 1, bias=True)
+        self.enc1_2 = CBR2d(64, 64, 3, 1, 1, bias=True)
         self.pool1 =  nn.MaxPool2d(kernel_size=2)
         
         # Encoder 2
-        self.enc2_1 = CBR2d(64, 128, 3, 1, 0, bias=True)
-        self.enc2_2 = CBR2d(128, 128, 3, 1, 0, bias=True)
+        self.enc2_1 = CBR2d(64, 128, 3, 1, 1, bias=True)
+        self.enc2_2 = CBR2d(128, 128, 3, 1, 1, bias=True)
         self.pool2 =  nn.MaxPool2d(kernel_size=2)
         
         # Encoder 3
-        self.enc3_1 = CBR2d(128, 256, 3, 1, 0, bias=True)
-        self.enc3_2 = CBR2d(256, 256, 3, 1, 0, bias=True)
+        self.enc3_1 = CBR2d(128, 256, 3, 1, 1, bias=True)
+        self.enc3_2 = CBR2d(256, 256, 3, 1, 1, bias=True)
         self.pool3 =  nn.MaxPool2d(kernel_size=2)
         
         # Encoder 4
-        self.enc4_1 = CBR2d(256, 512, 3, 1, 0, bias=True)
-        self.enc4_2 = CBR2d(512, 512, 3, 1, 0, bias=True)
+        self.enc4_1 = CBR2d(256, 512, 3, 1, 1, bias=True)
+        self.enc4_2 = CBR2d(512, 512, 3, 1, 1, bias=True)
         self.pool4 =  nn.MaxPool2d(kernel_size=2)
         
         # Encoder 5 and Decoder 5
-        self.enc5_1 = CBR2d(512, 1024, 3, 1, 0, bias=True)
-        self.enc5_2 = CBR2d(1024, 1024, 3, 1, 0, bias=True)
+        self.enc5_1 = CBR2d(512, 1024, 3, 1, 1, bias=True)
+        self.enc5_2 = CBR2d(1024, 1024, 3, 1, 1, bias=True)
         self.upconv4 = ConvTranspose2d(1024, 512, 2, 2, 0, bias=True)
         
         # Decoder 4
-        self.dec4_2 = CBR2d(1024, 512, 3, 1, 0, bias=True)
-        self.dec4_1 = CBR2d(512, 512, 3, 1, 0, bias=True)
+        self.dec4_2 = CBR2d(1024, 512, 3, 1, 1, bias=True)
+        self.dec4_1 = CBR2d(512, 512, 3, 1, 1, bias=True)
         self.upconv3 = ConvTranspose2d(512, 256, 2, 2, 0, bias=True)
         
         # Decoder 3
-        self.dec3_2 = CBR2d(512, 256, 3, 1, 0, bias=True)
-        self.dec3_1 = CBR2d(256, 256, 3, 1, 0, bias=True)
+        self.dec3_2 = CBR2d(512, 256, 3, 1, 1, bias=True)
+        self.dec3_1 = CBR2d(256, 256, 3, 1, 1, bias=True)
         self.upconv2 = ConvTranspose2d(256, 128, 2, 2, 0, bias=True)
         
         # Decoder 2
-        self.dec2_2 = CBR2d(256, 128, 3, 1, 0, bias=True)
-        self.dec2_1 = CBR2d(128, 128, 3, 1, 0, bias=True)
+        self.dec2_2 = CBR2d(256, 128, 3, 1, 1, bias=True)
+        self.dec2_1 = CBR2d(128, 128, 3, 1, 1, bias=True)
         self.upconv1 = ConvTranspose2d(128, 64, 2, 2, 0, bias=True)
 
         
         # Decoder 1
-        self.dec1_2 = CBR2d(128, 64, 3, 1, 0, bias=True)
-        self.dec1_1 = CBR2d(64, 64, 3, 1, 0, bias=True)
+        self.dec1_2 = CBR2d(128, 64, 3, 1, 1, bias=True)
+        self.dec1_1 = CBR2d(64, 64, 3, 1, 1, bias=True)
         self.score_fr = nn.Conv2d(in_channels=64, 
                                   out_channels=12,
                                   kernel_size=1,
                                   stride=1,
-                                  padding=1,
+                                  padding=0,
                                   bias=True)
         
 
-    def crop_img(in_tensor, out_size) :
-            """
-            Args :
-                in_tensor(tensor) : tensor to be cut
-                out-size(int) : sie of cut
-            """
-            dim1, idm2 = in_tensor.size()[2:]
-            out_tnesor = in_tensor[:,
-                                   :,
-                                  int((dim1-out_size)/2):int((dim1+out_size)/2),
-                                  int((dim1-out_size)/2):int((dim1+out_size)/2)]
-            return out_tensor   
+#     def crop_img(in_tensor, out_size) :
+#             """
+#             Args :
+#                 in_tensor(tensor) : tensor to be cut
+#                 out-size(int) : sie of cut
+#             """
+#             dim1, idm2 = in_tensor.size()[2:]
+#             out_tnesor = in_tensor[:,
+#                                    :,
+#                                   int((dim1-out_size)/2):int((dim1+out_size)/2),
+#                                   int((dim1-out_size)/2):int((dim1+out_size)/2)]
+#             return out_tensor   
         
     def forward(self, x):
         enc1_1 = self.enc1_1(x)
