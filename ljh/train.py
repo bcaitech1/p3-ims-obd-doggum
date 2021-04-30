@@ -59,6 +59,6 @@ model = smp.DeepLabV3Plus(encoder_name=encoder_name, classes=12, encoder_weights
 model = model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(params = model.parameters(), lr = learning_rate, weight_decay=1e-6)
-file_name = f"batch_size_{batch_size}_lr_{learning_rate}_crossentropy_adam_wd1e-6"
+file_name = f"batch_size_{batch_size}_lr_{learning_rate}_crossentropy_adam_wd1e-6.pth"
 
 train(num_epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name)
