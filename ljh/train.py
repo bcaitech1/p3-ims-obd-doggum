@@ -43,7 +43,7 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
             if avrg_mIoU > best_mIoU:
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
-                best_mIoU = avrg_loss
+                best_mIoU = avrg_mIoU
                 save_model(model, saved_dir, file_name)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
