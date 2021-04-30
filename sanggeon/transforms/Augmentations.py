@@ -11,6 +11,7 @@ class TestAugmentation:
 class CustomAugmentation:
     def __init__(self, **kwargs):
         self.transform = A.Compose([
+            A.Normalize(mean=(0.548, 0.504, 0.479), std=(0.237, 0.247, 0.246)),
             ToTensorV2()
         ])
 

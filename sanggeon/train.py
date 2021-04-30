@@ -113,7 +113,7 @@ def main():
 
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                               batch_size=args.batch_size,
-                                              num_workers=0,
+                                              num_workers=4,
                                               collate_fn=collate_fn)
 
     showImageMask(train_loader, list(sorted_df.Categories))
@@ -242,10 +242,12 @@ def validation(epoch, model, data_loader, criterion, device):
 
     return avrg_loss
 
-
+import albumentations as A
 def test(model, data_loader, device):
     size = 256
-    transform = TestAugmentation()
+
+    transform = A.Compose([A.Resize(256, 256)])
+
     print('Start prediction.')
     model.eval()
 
