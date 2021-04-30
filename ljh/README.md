@@ -13,7 +13,7 @@
 
 ## 4일차(4/30 금)
 - HRNet 포기(Pretrain 사용하기 위해 써야 하는 모델이 너무 무거움)
- - pretrained X, 최대한 가볍게 돌린 모델 20ep 기준 Valid mIoU 0.2xx대 나옴
+  - pretrained X, 최대한 가볍게 돌린 모델 20ep 기준 Valid mIoU 0.2xx대 나옴
 - DeeplabV3+기반 코드 재작성
 - 모듈화 완료
 
@@ -21,5 +21,5 @@
 - wandb 버전관리 시작
 - DeeplabV3+(EfficientNet-b3 Encoder) 학습 시작(모델은 우선 이걸로 고정할듯)
 - 대회의 leaderboard 산출 방식에 맞는 loss를 찾아보자..
- - 영성님의 TverskyLoss?
- - Weighted CE?
+  - 영성님의 TverskyLoss?
+  - Weighted CE?
