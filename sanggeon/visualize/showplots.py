@@ -2,10 +2,17 @@
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+from torchvision.transforms import transforms
 
 plt.rcParams['axes.grid'] = False
 
 def showImageMask(data_loader, category_names, test:bool=False, model=None, device=None):
+    invTrans = transforms.Compose([transforms.Normalize(mean=[0., 0., 0.],
+                                                        std=[1 / 0.229, 1 / 0.224, 1 / 0.225]),
+                                   transforms.Normalize(mean=[-0.485, -0.456, -0.406],
+                                                        std=[1., 1., 1.]),
+                                   ])
+
     # data_loader의 output 결과(image 및 mask) 확인
     if not test:
         # train 이나 val
@@ -50,7 +57,7 @@ def showImageMask(data_loader, category_names, test:bool=False, model=None, devi
         print('Unique values, category of transformed mask : \n',
               [{int(i), category_names[int(i)]} for i in list(np.unique(temp_masks[0]))])
 
-    ax1.imshow(temp_images[i].permute([1, 2, 0]))
+    ax1.imshow(invTrans(temp_images[i]).permute([1, 2, 0]))
     ax1.grid(False)
     if model == None:
         ax1.set_title("input image : {}".format(image_infos['file_name']), fontsize=15)

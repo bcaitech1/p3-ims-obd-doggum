@@ -11,9 +11,9 @@ from tqdm import tqdm
 import pandas as pd
 
 from datasets.data_loader import setup_loader
-from utils.utils import label_accuracy_score
+from utils.utils import fast_hist, label_accuracy_score
 from datasets.data_loader import CustomDataLoader
-from transforms.Augmentations import TestAugmentation, CustomAugmentation
+from transforms.Augmentations import TestAugmentation, CustomAugmentation, CustomAugmentation2
 from visualize.showplots import showImageMask
 from network.utils import get_model
 from loss.optimizer import get_optimizer
@@ -23,13 +23,13 @@ from loss.utils import get_loss
 # Argument Parser
 parser = argparse.ArgumentParser(description='Semantic Segmentation')
 parser.add_argument('--lr', type=float, default=0.0001)
-parser.add_argument('--epochs', type=int, default=11)
-parser.add_argument('--batch_size', type=int, default=8)
+parser.add_argument('--epochs', type=int, default=20)
+parser.add_argument('--batch_size', type=int, default=16)
 parser.add_argument('--seed', type=int, default=21)
 parser.add_argument('--eval', type=bool, default=False)
 parser.add_argument('--criterion', type=str, default='cross_entropy')
 parser.add_argument('--optimizer', type=str, default='adam')
-parser.add_argument('--model', type=str, default='segnetvgg16')
+parser.add_argument('--model', type=str, default='unetmnv2')
 
 # Container environment
 parser.add_argument("--dataset_path", type=str, default= '../input/data')
@@ -78,7 +78,19 @@ def main():
 
     val_transform = CustomAugmentation()
 
-    test_transform = CustomAugmentation()
+    test_transform = TestAugmentation()
+    # from albumentations.pytorch import ToTensorV2
+    # train_transform = A.Compose([
+    #     ToTensorV2()
+    # ])
+    #
+    # val_transform = A.Compose([
+    #     ToTensorV2()
+    # ])
+    #
+    # test_transform = A.Compose([
+    #     ToTensorV2()
+    # ])
 
     # create own Dataset 1 (skip)
     # validation set을 직접 나누고 싶은 경우
@@ -103,30 +115,31 @@ def main():
                                                batch_size=args.batch_size,
                                                shuffle=True,
                                                num_workers=4,
-                                               collate_fn=collate_fn)
+                                               collate_fn=collate_fn,
+                                               drop_last = True)
 
     val_loader = torch.utils.data.DataLoader(dataset=val_dataset,
                                              batch_size=args.batch_size,
                                              shuffle=False,
-                                             num_workers=4,
+                                             num_workers=2,
                                              collate_fn=collate_fn)
 
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                               batch_size=args.batch_size,
-                                              num_workers=0,
+                                              num_workers=2,
                                               collate_fn=collate_fn)
 
-    showImageMask(train_loader, list(sorted_df.Categories))
-    showImageMask(val_loader, list(sorted_df.Categories))
-    showImageMask(test_loader, list(sorted_df.Categories), test=True)
+    # showImageMask(train_loader, list(sorted_df.Categories))
+    # showImageMask(val_loader, list(sorted_df.Categories))
+    # showImageMask(test_loader, list(sorted_df.Categories), test=True)
 
     # 구현된 model에 임의의 input을 넣어 output이 잘 나오는지 test
 
     model = get_model(args, num_classes=12)
-    x = torch.randn([1, 3, 512, 512])
-    print("input shape : ", x.shape)
-    out = model(x).to(device)
-    print("output shape : ", out.size())
+    # x = torch.randn([1, 3, 512, 512])
+    # print("input shape : ", x.shape)
+    # out = model(x).to(device)
+    # print("output shape : ", out.size())
 
     model = model.to(device)
 
@@ -137,11 +150,11 @@ def main():
     if not os.path.isdir(saved_dir):
         os.mkdir(saved_dir)
 
-    criterion = get_loss(args)
-    optimizer = get_optimizer(args, model)
+    if not args.eval:
+        criterion = get_loss(args)
+        optimizer = get_optimizer(args, model)
 
-    train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
-
+        train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
 
     # best model 저장된 경로
     model_path = f'./saved/{args.model}_best_model.pt'
@@ -153,8 +166,6 @@ def main():
     # 추론을 실행하기 전에는 반드시 설정 (batch normalization, dropout 를 평가 모드로 설정)
     model.eval()
     showImageMask(test_loader, list(sorted_df.Categories), test=True, model=model, device=device)
-
-    test(model, test_loader, device)
 
     # sample_submisson.csv 열기
     submission = pd.read_csv('./submission/sample_submission.csv', index_col=None)
@@ -170,7 +181,7 @@ def main():
 
     # submission.csv로 저장
     tm = time.gmtime()
-    time_string = time.strftime('%yy%mm%dd%H_%M_%S', tm)
+    time_string = time.strftime('%yy%mm%dd_%H_%M_%S', tm)
     submission.to_csv(f"./submission/{args.model}_{time_string}.csv", index=False)
 
 
@@ -182,6 +193,7 @@ def save_model(model, saved_dir, file_name='SegNet_best_model.pt'):
 def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, saved_dir, val_every, device):
     print('Start training..')
     best_loss = 9999999
+    best_mIoU = 0
     for epoch in range(num_epochs):
         model.train()
         for step, (images, masks, _) in tqdm(enumerate(data_loader), total=len(data_loader)):
@@ -206,6 +218,8 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(
                     epoch + 1, num_epochs, step + 1, len(data_loader), loss.item()))
 
+        if (epoch + 1) == 6:
+            save_model(model, saved_dir, f'{args.model}_best_model6.pt')
         # validation 주기에 따른 loss 출력 및 best model 저장
         if (epoch + 1) % val_every == 0:
             avrg_loss = validation(epoch + 1, model, val_loader, criterion, device)
@@ -222,10 +236,12 @@ def validation(epoch, model, data_loader, criterion, device):
     with torch.no_grad():
         total_loss = 0
         cnt = 0
-        mIoU_list = []
+        n_class = 12
+        hist = np.zeros((n_class, n_class))
         for step, (images, masks, _) in enumerate(data_loader):
+
             images = torch.stack(images)  # (batch, channel, height, width)
-            masks = torch.stack(masks).long()  # (batch, channel, height, width)
+            masks = torch.stack(masks).long()  # (batch, height, width)
 
             images, masks = images.to(device), masks.to(device)
 
@@ -236,21 +252,23 @@ def validation(epoch, model, data_loader, criterion, device):
 
             outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
 
-            mIoU = label_accuracy_score(masks.detach().cpu().numpy(), outputs, n_class=12)[2]
-            mIoU_list.append(mIoU)
+            # 각각의 mask에 대한 confusion matrix를 hist에 저장
+            for lt, lp in zip(outputs, masks.detach().cpu().numpy()):
+                hist += fast_hist(lt.flatten(), lp.flatten(), n_class)
 
         avrg_loss = total_loss / cnt
-        print('Validation #{}  Average Loss: {:.4f}, mIoU: {:.4f}'.format(epoch, avrg_loss, np.mean(mIoU_list)))
+        mIoU = label_accuracy_score(hist)
+        print('Validation #{}  Average Loss: {:.4f}, mIoU: {:.4f}'.format(epoch, avrg_loss,
+                                                                          mIoU))
 
     return avrg_loss
 
-
+import albumentations as A
 def test(model, data_loader, device):
-    for imgs, image_infos in data_loader:
-        temp_images = imgs
-        break
     size = 256
-    transform = TestAugmentation()
+
+    transform = A.Compose([A.Resize(256, 256)])
+
     print('Start prediction.')
     model.eval()
 
@@ -266,7 +284,7 @@ def test(model, data_loader, device):
 
             # resize (256 x 256)
             temp_mask = []
-            for img, mask in zip(np.stack(temp_images), oms):
+            for img, mask in zip(np.stack(imgs), oms):
                 transformed = transform(image=img, mask=mask)
                 mask = transformed['mask']
                 temp_mask.append(mask)
