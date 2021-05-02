@@ -1,46 +1,18 @@
 import torch
-from utils import label_accuracy_score
-import os
+import torch.nn as nn
+from utils import save_model
+from utils import validation
+from tqdm import tqdm
+from dataset import get_datasets
+import segmentation_models_pytorch as smp
+import wandb
 
-def save_model(model, saved_dir, file_name='fcn8s_best_model(pretrained).pt'):
-    check_point = {'net': model.state_dict()}
-    output_path = os.path.join(saved_dir, file_name)
-    torch.save(model.state_dict(), output_path)
-
-def validation(epoch, model, data_loader, criterion, device):
-    print('Start validation #{}'.format(epoch))
-    model.eval()
-    with torch.no_grad():
-        total_loss = 0
-        cnt = 0
-        mIoU_list = []
-        for step, (images, masks, _) in enumerate(data_loader):
-            images = torch.stack(images)  # (batch, channel, height, width)
-            masks = torch.stack(masks).long()  # (batch, channel, height, width)
-
-            images, masks = images.to(device), masks.to(device)
-
-            outputs = model(images)
-            loss = criterion(outputs, masks)
-            total_loss += loss
-            cnt += 1
-
-            outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
-
-            mIoU = label_accuracy_score(masks.detach().cpu().numpy(), outputs, n_class=12)[2]
-            mIoU_list.append(mIoU)
-
-        avrg_loss = total_loss / cnt
-        print('Validation #{}  Average Loss: {:.4f}, mIoU: {:.4f}'.format(epoch, avrg_loss, np.mean(mIoU_list)))
-
-    return avrg_loss
-
-def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, saved_dir, val_every, device):
+def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name):
     print('Start training..')
-    best_loss = 9999999
+    best_mIoU = 0
     for epoch in range(num_epochs):
         model.train()
-        for step, (images, masks, _) in enumerate(data_loader):
+        for step, (images, masks, _) in tqdm(enumerate(data_loader)):
             images = torch.stack(images)  # (batch, channel, height, width)
             masks = torch.stack(masks).long()  # (batch, channel, height, width)
 
@@ -48,7 +20,12 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
             images, masks = images.to(device), masks.to(device)
 
             # inference
-            outputs = model(images)
+            if images.size()[0] == 1:
+                model.eval()
+                outputs = model(images)
+                model.train()
+            else:
+                outputs = model(images)
 
             # loss 계산 (cross entropy loss)
             loss = criterion(outputs, masks)
@@ -59,21 +36,50 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
             # step 주기에 따른 loss 출력
             if (step + 1) % 25 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(
-                    epoch + 1, num_epochs, step + 1, len(train_loader), loss.item()))
+                    epoch + 1, num_epochs, step + 1, len(data_loader), loss.item()))
 
         # validation 주기에 따른 loss 출력 및 best model 저장
         if (epoch + 1) % val_every == 0:
-            avrg_loss = validation(epoch + 1, model, val_loader, criterion, device)
-            if avrg_loss < best_loss:
+            avrg_loss, avrg_mIoU = validation(epoch + 1, model, val_loader, criterion, device)
+            if avrg_mIoU > best_mIoU:
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
-                best_loss = avrg_loss
-                save_model(model, saved_dir)
+                best_mIoU = avrg_mIoU
+                save_model(model, saved_dir, file_name)
+            wandb.log({ "Train loss":loss.item(),
+                       "Valid loss":avrg_loss,
+                       "Valid mIoU":avrg_mIoU})
 
-# from models.hrnet import get_seg_model
-# from models.config import _C as cfg
-# model = get_seg_model(cfg)
-from models.hrnet_base import hrnet32
 
-model = hrnet32(pretrained=True)
-print(model)
+wandb.init(project="stage3-semantic-segmentation")
+
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+val_every = 1
+batch_size = 8   # Mini-batch size
+num_epochs = 40
+learning_rate = 0.0001
+encoder_name = "efficientnet-b3"
+saved_dir = "./saved/"+"DeepLabV3Plus/"+encoder_name
+train_loader, val_loader, test_loader = get_datasets(batch_size)
+
+cfg = {"model":"deeplabv3plus_"+encoder_name,
+       "batch_size":batch_size,
+       "num_epochs":num_epochs,
+       "learning_rate":learning_rate,
+       "loss":"CE",
+       "opt":"ADAM",
+       "Weight_decay":1e-6,
+       "valid":"default"}
+
+wandb.config.update(cfg)
+wandb.run.name = 'deeplabv3_first'
+wandb.run.save()
+
+model = smp.DeepLabV3Plus(encoder_name=encoder_name, classes=12, encoder_weights="imagenet", activation=None)
+model = model.to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(params = model.parameters(), lr = learning_rate, weight_decay=1e-6)
+file_name = f"batch_size_{batch_size}_lr_{learning_rate}_crossentropy_adam_wd1e-6.pth"
+
+train(num_epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name)
