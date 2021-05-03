@@ -49,6 +49,8 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 save_model(model, saved_dir, file_name)
                 best_opt = optimizer.state_dict()
             else:
+                file_path = saved_dir+"/"+file_name
+                model.load_state_dict(torch.load(file_path, map_location=device))
                 optimizer.load_state_dict(best_opt)
                 for g in optimizer.param_groups:
                     g['lr']=g['lr']/3
