@@ -31,4 +31,7 @@
 - Custom Scheduling 적용(mIoU 감소 시 이전 상태로 돌아가서 lr 낮추는 방식  
   - train 단계에선 어느정도 효과가 있음  
    ![image](https://user-images.githubusercontent.com/43736669/116854730-22aced80-ac33-11eb-86c1-dc68e5858d5d.png)
+  - public LB 0.3 상승
+   ![image](https://user-images.githubusercontent.com/43736669/116855902-280b3780-ac35-11eb-81ce-50af089ae512.png)
+
 
