@@ -47,12 +47,19 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Save model in', saved_dir)
                 best_mIoU = avrg_mIoU
                 save_model(model, saved_dir, file_name)
+                best_opt = optimizer.state_dict()
+            else:
+                optimizer.load_state_dict(best_opt)
+                for g in optimizer.param_groups:
+                    g['lr']=g['lr']/3
+
+
             wandb.log({ "Train loss":loss.item(),
                        "Valid loss":avrg_loss,
                        "Valid mIoU":avrg_mIoU})
 
 
-#wandb.init(project="stage3-semantic-segmentation")
+wandb.init(project="stage3-semantic-segmentation")
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -71,17 +78,18 @@ cfg = {"model":"deeplabv3plus_"+encoder_name,
        "loss":"CE",
        "opt":"ADAM",
        "Weight_decay":1e-6,
+       "Scheduler" : "Custom lr load and devide 3",
        "valid":"default"}
 
 wandb.config.update(cfg)
-wandb.run.name = 'deeplabv3_0502_1'
+wandb.run.name = 'deeplabv3_0503_1'
 wandb.run.save()
 
 model = smp.DeepLabV3Plus(encoder_name=encoder_name, classes=12, encoder_weights="imagenet", activation=None)
 model = model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(params = model.parameters(), lr = learning_rate, weight_decay=1e-6)
-file_name = f"batch_size_{batch_size}_lr_{learning_rate}_crossentropy_adam_wd1e-6.pth"
+file_name = f"batch_size_{batch_size}_lr_{learning_rate}_crossentropy_adam_wd1e-6_csdiv3.pth"
 
 train(num_epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name)
 file_path = saved_dir+"/"+file_name
@@ -100,4 +108,4 @@ for file_name, string in zip(file_names, preds):
                                    ignore_index=True)
 
 # submission.csv로 저장
-submission.to_csv("./submission/"+f"ec_{encoder_name}_bs_{batch_size}_lr_{learning_rate}_ce_adam_noaug.csv", index=False)
+submission.to_csv("./submission/"+f"ec_{encoder_name}_bs_{batch_size}_lr_{learning_rate}_ce_adam_noaug_cs3.csv", index=False)
