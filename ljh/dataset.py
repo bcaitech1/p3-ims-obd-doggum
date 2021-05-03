@@ -87,8 +87,9 @@ class CustomDataLoader(Dataset):
 
         # cv2 를 활용하여 image 불러오기
         images = cv2.imread(os.path.join(dataset_path, image_infos['file_name']))
-        images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB).astype(np.float32)
-        images /= 255.0
+        #images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB).astype(np.float32)
+        #images /= 255.0
+        images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB)
 
         if (self.mode in ('train', 'val')):
             ann_ids = self.coco.getAnnIds(imgIds=image_infos['id'])
@@ -107,7 +108,7 @@ class CustomDataLoader(Dataset):
                 className = get_classname(anns[i]['category_id'], cats)
                 pixel_value = self.category_names.index(className)
                 masks = np.maximum(self.coco.annToMask(anns[i]) * pixel_value, masks)
-            masks = masks.astype(np.float32)
+            #masks = masks.astype(np.float32)
 
             # transform -> albumentations 라이브러리 활용
             if self.transform is not None:
@@ -134,7 +135,12 @@ def collate_fn(batch):
 
 def get_datasets(batch_size):
     train_transform = A.Compose([
-        ToTensorV2()
+        A.CropNonEmptyMaskIfExists(height=256, width=256, p=0.5),
+        A.Resize(height=512, width=512, p=1.0),
+        A.CLAHE(p=0.5),
+        A.HorizontalFlip(p=0.5),
+        A.Normalize(mean=(0.485, 0.456, 0.406),std=(0.229, 0.224, 0.225),max_pixel_value=255.0, p=1.0 ),
+        ToTensorV2(transpose_mask=True)
     ])
 
     val_transform = A.Compose([
