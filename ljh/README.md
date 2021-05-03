@@ -29,6 +29,6 @@
 
 ## 7일차(5/3 월)
 - Custom Scheduling 적용(mIoU 감소 시 이전 상태로 돌아가서 lr 낮추는 방식  
- - train 단계에선 어느정도 효과가 있음  
+  - train 단계에선 어느정도 효과가 있음  
    ![image](https://user-images.githubusercontent.com/43736669/116854730-22aced80-ac33-11eb-86c1-dc68e5858d5d.png)
 
