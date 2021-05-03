@@ -164,18 +164,18 @@ def main():
         teacher_model.zero_grad()
         student_model.zero_grad()
 
-        # model_path = f'./saved/{args.model}_best_model.pt'
-        model_teacher_path = f'./saved/{args.model}_best_teacher_model.pt'
-        model_student_path = f'./saved/{args.model}_best_student_model.pt'
+        model_path = f'./saved/{args.model}_best_model.pt'
+        # model_teacher_path = f'./saved/{args.model}_best_teacher_model.pt'
+        # model_student_path = f'./saved/{args.model}_best_student_model.pt'
 
         # best model 불러오기
-        # checkpoint = torch.load(model_path, map_location=device)
-        # teacher_model.load_state_dict(checkpoint)
-        # student_model.load_state_dict(checkpoint)
-        checkpoint_teacher = torch.load(model_teacher_path, map_location=device)
-        teacher_model.load_state_dict(checkpoint_teacher)
-        checkpoint_student = torch.load(model_student_path, map_location=device)
-        teacher_model.load_state_dict(checkpoint_student)
+        checkpoint = torch.load(model_path, map_location=device)
+        teacher_model.load_state_dict(checkpoint)
+        student_model.load_state_dict(checkpoint)
+        # checkpoint_teacher = torch.load(model_teacher_path, map_location=device)
+        # teacher_model.load_state_dict(checkpoint_teacher)
+        # checkpoint_student = torch.load(model_student_path, map_location=device)
+        # teacher_model.load_state_dict(checkpoint_student)
 
         train(args, args.epochs, teacher_model, student_model, train_loader, val_loader, test_loader, criterion,
               t_optimizer, s_optimizer, saved_dir, val_every, device)
@@ -271,13 +271,16 @@ def train(args, num_epochs, teacher_model, student_model, data_loader, val_loade
         # print("\nsoft_pseudo_label")
         # print(soft_pseudo_label.shape)
         # print(soft_pseudo_label[0])
+        # print(torch.max(soft_pseudo_label))
         max_probs, hard_pseudo_label = torch.max(soft_pseudo_label, dim=1)
         # print("\nmax_probs")
         # print(max_probs.shape)
         # print(max_probs[0])
+        # print(torch.max(max_probs))
         # print("\nhard_pseudo_label")
         # print(hard_pseudo_label.shape)
         # print(hard_pseudo_label[0])
+        # print(torch.max(hard_pseudo_label))
         mask = max_probs.ge(args.threshold).float()
         # print("\nmask")
         # print(mask.shape)
@@ -297,7 +300,7 @@ def train(args, num_epochs, teacher_model, student_model, data_loader, val_loade
 
         s_loss_l_old = F.cross_entropy(s_logits_l.detach(), masks_l)
         # s_loss = criterion(s_logits_u, hard_pseudo_label)
-        s_loss = torch.nn.MultiLabelSoftMarginLoss()(s_logits_u, soft_pseudo_label)
+        s_loss = torch.nn.MultiLabelSoftMarginLoss()(s_logits_u, soft_pseudo_label * 10)
         s_optimizer.zero_grad()
         s_loss.backward()
         s_optimizer.step()
