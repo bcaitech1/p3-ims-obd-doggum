@@ -27,9 +27,12 @@ parser.add_argument('--epochs', type=int, default=20)
 parser.add_argument('--batch_size', type=int, default=16)
 parser.add_argument('--seed', type=int, default=21)
 parser.add_argument('--eval', type=bool, default=False)
+parser.add_argument('--augmentation', type=str, default='CustomAugmentation3')
 parser.add_argument('--criterion', type=str, default='cross_entropy')
 parser.add_argument('--optimizer', type=str, default='adam')
 parser.add_argument('--model', type=str, default='unetmnv2')
+parser.add_argument('--continue_load', type=str, default='')
+parser.add_argument('--evalload', type=str, default='miou')
 
 # Container environment
 parser.add_argument("--dataset_path", type=str, default= '../input/data')
@@ -74,11 +77,13 @@ def main():
     def collate_fn(batch):
         return tuple(zip(*batch))
 
-    train_transform = CustomAugmentation()
+    augmentation_module = getattr(import_module("transforms.Augmentations"), args.augmentation)
+    # train_transform = get_augmentation(args, mode='train')
+    train_transform = augmentation_module(mode='train')
 
-    val_transform = CustomAugmentation()
+    val_transform = augmentation_module(mode='val')
 
-    test_transform = TestAugmentation()
+    test_transform = augmentation_module(mode='test')
     # from albumentations.pytorch import ToTensorV2
     # train_transform = A.Compose([
     #     ToTensorV2()
@@ -154,10 +159,31 @@ def main():
         criterion = get_loss(args)
         optimizer = get_optimizer(args, model)
 
+        if args.continue_load in ('miou', 'loss'):
+
+            if args.continue_load == 'miou':
+                # best model 저장된 경로
+                model_path = f'./saved/{args.model}_best_model_miou.pt'
+            elif args.contiue_load == 'loss':
+                # best model 저장된 경로
+                model_path = f'./saved/{args.model}_best_model_loss.pt'
+
+            # best model 불러오기
+            checkpoint = torch.load(model_path, map_location=device)
+            model.load_state_dict(checkpoint)
+
+
         train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
 
-    # best model 저장된 경로
-    model_path = f'./saved/{args.model}_best_model.pt'
+    if args.evalload == 'miou':
+        # best model 저장된 경로
+        model_path = f'./saved/{args.model}_best_model_miou.pt'
+    elif args.evalload == 'loss':
+        # best model 저장된 경로
+        model_path = f'./saved/{args.model}_best_model_loss.pt'
+    else:
+        print('must choice miou / loss')
+
 
     # best model 불러오기
     checkpoint = torch.load(model_path, map_location=device)
