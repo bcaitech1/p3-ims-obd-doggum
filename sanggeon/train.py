@@ -244,8 +244,8 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(
                     epoch + 1, num_epochs, step + 1, len(data_loader), loss.item()))
 
-        if (epoch + 1) == 6:
-            save_model(model, saved_dir, f'{args.model}_best_model6.pt')
+        # if (epoch + 1) == 6:
+        #     save_model(model, saved_dir, f'{args.model}_best_model6.pt')
         # validation 주기에 따른 loss 출력 및 best model 저장
         if (epoch + 1) % val_every == 0:
             avrg_loss, avrg_mIoU = validation(epoch + 1, model, val_loader, criterion, device)
@@ -253,7 +253,13 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
                 best_loss = avrg_loss
-                save_model(model, saved_dir, f'{args.model}_best_model.pt')
+                save_model(model, saved_dir, f'{args.model}_best_model_loss.pt')
+
+            if avrg_mIoU > best_mIoU:
+                print('Best performance at epoch: {}'.format(epoch + 1))
+                print('Save model in', saved_dir)
+                best_mIoU = avrg_mIoU
+                save_model(model, saved_dir, f'{args.model}_best_model_miou.pt')
 
 
 def validation(epoch, model, data_loader, criterion, device):
