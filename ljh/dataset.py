@@ -137,7 +137,7 @@ def get_datasets(batch_size):
     train_transform = A.Compose([
         A.CropNonEmptyMaskIfExists(height=256, width=256, p=0.5),
         A.Resize(height=512, width=512, p=1.0),
-        A.CLAHE(p=0.5),
+        A.CLAHE(p=0.3),
         A.HorizontalFlip(p=0.5),
         A.Normalize(mean=(0.485, 0.456, 0.406),std=(0.229, 0.224, 0.225),max_pixel_value=255.0, p=1.0),
         ToTensorV2(transpose_mask=True)
@@ -145,12 +145,12 @@ def get_datasets(batch_size):
 
     val_transform = A.Compose([
         A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0),
-        ToTensorV2()
+        ToTensorV2(transpose_mask=True)
     ])
 
     test_transform = A.Compose([
         A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0),
-        ToTensorV2()
+        ToTensorV2(transpose_mask=True)
     ])
 
     # create own Dataset 1 (skip)
