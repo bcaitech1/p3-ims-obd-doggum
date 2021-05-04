@@ -14,7 +14,6 @@ import pandas as pd
 from datasets.data_loader import setup_loader
 from utils.utils import add_hist, label_accuracy_score
 from datasets.data_loader import CustomDataLoader
-from transforms.Augmentations import TestAugmentation, CustomAugmentation, CustomAugmentation2
 from visualize.showplots import showImageMask
 from network.utils import get_model
 from loss.optimizer import get_optimizer
