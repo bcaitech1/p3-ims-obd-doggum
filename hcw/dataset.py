@@ -135,7 +135,7 @@ def collate_fn(batch):
 
 def get_datasets(batch_size):
     train_transform = A.Compose([
-        A.CropNonEmptyMaskIfExists(height=200, width=200, p=0.5),  #원래 256
+        A.CropNonEmptyMaskIfExists(height=256, width=256, p=0.5), 
         A.Resize(height=512, width=512, p=1.0),
         A.CLAHE(p=0.5),
         A.HorizontalFlip(p=0.5),
