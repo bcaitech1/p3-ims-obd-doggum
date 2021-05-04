@@ -12,7 +12,7 @@ from tqdm import tqdm
 import pandas as pd
 
 from datasets.data_loader import setup_loader
-from utils.utils import fast_hist, label_accuracy_score
+from utils.utils import add_hist, label_accuracy_score
 from datasets.data_loader import CustomDataLoader
 from transforms.Augmentations import TestAugmentation, CustomAugmentation, CustomAugmentation2
 from visualize.showplots import showImageMask
@@ -249,7 +249,7 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
             save_model(model, saved_dir, f'{args.model}_best_model6.pt')
         # validation 주기에 따른 loss 출력 및 best model 저장
         if (epoch + 1) % val_every == 0:
-            avrg_loss = validation(epoch + 1, model, val_loader, criterion, device)
+            avrg_loss, avrg_mIoU = validation(epoch + 1, model, val_loader, criterion, device)
             if avrg_loss < best_loss:
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
@@ -279,16 +279,15 @@ def validation(epoch, model, data_loader, criterion, device):
 
             outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
 
-            # 각각의 mask에 대한 confusion matrix를 hist에 저장
-            for lt, lp in zip(outputs, masks.detach().cpu().numpy()):
-                hist += fast_hist(lt.flatten(), lp.flatten(), n_class)
+            hist = add_hist(hist, masks.detach().cpu().numpy(), outputs, n_class=n_class)
 
+        acc, acc_cls, mIoU, fwavacc = label_accuracy_score(hist)
         avrg_loss = total_loss / cnt
         mIoU = label_accuracy_score(hist)
         print('Validation #{}  Average Loss: {:.4f}, mIoU: {:.4f}'.format(epoch, avrg_loss,
                                                                           mIoU))
 
-    return avrg_loss
+    return avrg_loss, mIoU
 
 import albumentations as A
 def test(model, data_loader, device):
