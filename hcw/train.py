@@ -15,8 +15,8 @@ import random
 
 def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, saved_dir, val_every, device, file_name):
     print('Start training..')
-    best_mIoU = 0            #0.4364
-    for epoch in range(15,num_epochs,1):
+    best_mIoU = 0          
+    for epoch in range(num_epochs):
         model.train()
         for step, (images, masks, _) in tqdm(enumerate(data_loader)):
             images = torch.stack(images)  # (batch, channel, height, width)
