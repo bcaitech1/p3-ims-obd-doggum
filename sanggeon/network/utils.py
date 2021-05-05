@@ -16,4 +16,22 @@ def get_model(args, num_classes):
         model = smp.DeepLabV3Plus(encoder_name='se_resnext101_32x4d', classes=num_classes, encoder_weights='imagenet',
                                  activation=None)
 
+    # ValueError: InceptionResnetV2 encoder does not support dilated mode due to pooling operation for downsampling!
+    if args.model == 'deeplabv3plus-inceptionresnetv2':
+        model = smp.DeepLabV3Plus(encoder_name='inceptionresnetv2', classes=num_classes, encoder_weights='imagenet+background', activation=None)
+
+    # ValueError: InceptionResnetV2 encoder does not support dilated mode due to pooling operation for downsampling!
+    if args.model == 'deeplabv3plus-inceptionv4':
+        model = smp.DeepLabV3Plus(encoder_name='inceptionv4', classes=num_classes, encoder_weights='imagenet+background', activation=None)
+    # Too big.
+    if args.model == 'unetplusplus-inceptionv4':
+        model = smp.UnetPlusPlus(encoder_name='inceptionresnetv2', classes=num_classes, encoder_weights='imagenet+background', activation=None)
+
+    if args.model == 'deeplabv3plus-timm-regnety_120':
+        model = smp.DeepLabV3Plus(encoder_name='timm-regnety_120', classes=num_classes, encoder_weights='imagenet', activation=None)
+
+    if args.model == 'deeplabv3plus-mobilenet_v2':
+        model = smp.DeepLabV3Plus(encoder_name='mobilenet_v2', classes=num_classes, encoder_weights='imagenet',
+                                  activation=None)
+
     return model

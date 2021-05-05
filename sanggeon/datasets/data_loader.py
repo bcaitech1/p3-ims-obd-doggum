@@ -108,7 +108,7 @@ class CustomDataLoader(Dataset):
 
         # cv2 를 활용하여 image 불러오기
         images = cv2.imread(os.path.join(self.dataset_path, image_infos['file_name']))
-        images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB).astype(np.float32)
+        images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB)
         # images /= 255.0
 
         if (self.mode in ('train', 'val')):
@@ -128,7 +128,7 @@ class CustomDataLoader(Dataset):
                 className = get_classname(anns[i]['category_id'], cats)
                 pixel_value = self.category_names.index(className)
                 masks = np.maximum(self.coco.annToMask(anns[i]) * pixel_value, masks)
-            masks = masks.astype(np.float32)
+            # masks = masks.astype(np.float32)
 
             # transform -> albumentations 라이브러리 활용
             if self.transform is not None:
