@@ -7,13 +7,12 @@ import os
 
 class CustomDataLoader(Dataset):
     """COCO format"""
-    def __init__(self, data_dir, dataset_path, category_names, mode = 'train', transform = None):
+    def __init__(self, data_dir, dataset_path, mode = 'train', transform = None):
         super().__init__()
         self.mode = mode
         self.transform = transform
         self.coco = COCO(data_dir)
         self.dataset_path = dataset_path
-        self.category_names = category_names
         
     def __getitem__(self, index: int):
         # dataset이 index되어 list처럼 동작
@@ -39,7 +38,7 @@ class CustomDataLoader(Dataset):
             # Unknown = 1, General trash = 2, ... , Cigarette = 11
             for i in range(len(anns)):
                 className = get_classname(anns[i]['category_id'], cats)
-                pixel_value = self.category_names.index(className)
+                pixel_value = category_names.index(className)
                 masks = np.maximum(self.coco.annToMask(anns[i])*pixel_value, masks)
 #             masks = masks.astype(np.float32)
 

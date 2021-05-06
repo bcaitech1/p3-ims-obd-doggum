@@ -46,7 +46,7 @@ def get_dataset_path(args):
     train_path = dataset_path + '/train.json'
     val_path = dataset_path + '/val.json'
     test_path = dataset_path + '/test.json'
-    return dataset_path, train_path, val_path, test_path
+    return train_path, val_path, test_path
     
 def processing_dataset(train_path, val_path, test_path):
 
@@ -96,7 +96,7 @@ def processing_dataset(train_path, val_path, test_path):
     return category_names
 
 
-def load_all_dataset(train_path, val_path, test_path, dataset_path, category_names, collate_fn, args):
+def load_all_dataset(train_path, val_path, test_path, dataset_path, collate_fn, args):
 
     train_transform = A.Compose([
         A.CropNonEmptyMaskIfExists(height=256, width=256, p=0.5),
@@ -118,11 +118,11 @@ def load_all_dataset(train_path, val_path, test_path, dataset_path, category_nam
         ),
         ToTensorV2(transpose_mask=True)
     ])
-    train_dataset = CustomDataLoader(data_dir=train_path, dataset_path=dataset_path, mode='train', category_names=category_names, transform=train_transform)
+    train_dataset = CustomDataLoader(data_dir=train_path, dataset_path=dataset_path, mode='train', transform=train_transform)
     # validation dataset
-    val_dataset = CustomDataLoader(data_dir=val_path, dataset_path=dataset_path, mode='val', category_names=category_names, transform=val_transform)
+    val_dataset = CustomDataLoader(data_dir=val_path, dataset_path=dataset_path, mode='val', transform=val_transform)
     # test dataset
-    test_dataset = CustomDataLoader(data_dir=test_path, dataset_path=dataset_path, mode='test', category_names=category_names, transform=val_transform)
+    test_dataset = CustomDataLoader(data_dir=test_path, dataset_path=dataset_path, mode='test', transform=val_transform)
 
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset, 
@@ -150,7 +150,7 @@ def load_all_dataset(train_path, val_path, test_path, dataset_path, category_nam
 
     return train_loader, val_loader, test_loader
 
-def load_test_dataset(test_path, dataset_path, category_names, collate_fn, args):
+def load_test_dataset(test_path, dataset_path, collate_fn, args):
     val_transform = A.Compose([
         A.Normalize(
             mean=(0.485, 0.456, 0.406),
@@ -159,7 +159,7 @@ def load_test_dataset(test_path, dataset_path, category_names, collate_fn, args)
         ),
         ToTensorV2(transpose_mask=True)
     ])
-    test_dataset = CustomDataLoader(data_dir=test_path, dataset_path=dataset_path, mode='test', category_names=category_names, transform=val_transform)
+    test_dataset = CustomDataLoader(data_dir=test_path, dataset_path=dataset_path, mode='test', transform=val_transform)
 
     test_loader = torch.utils.data.DataLoader(
         dataset=test_dataset,
@@ -197,14 +197,14 @@ if __name__=='__main__':
     parser.add_argument("--model_path", default='augmentation test/CropNonEmptyMaskIfExists_CLAHE_HorizontalFlip_Resize/', type=str, help='input your model_path after saved directory')
     parser.add_argument("--mode", default='train', type=str, help='select mode')
     parser.add_argument("--seed", default=42, type=int, help="insert your seed number")
-    parser.add_argument("--batch_size", default=8, type=int)
-    parser.add_argument("--encoder_name", default='efficientnet-b0', type=str, help="backbone model")
+    parser.add_argument("--batch_size", default=16, type=int)
+    parser.add_argument("--encoder_name", default='efficientnet-b7', type=str, help="backbone model")
     parser.add_argument("--num_classes", default=12, type=int, help="the number of class")
     parser.add_argument("--learning_rate", default=0.0001, type=float)
     parser.add_argument("--num_epochs", default=30, type=int)
     parser.add_argument("--dataset_dir", default='/opt/ml/input/data', type=str, help="dataset directory")
     args = vars(parser.parse_args())
-    dataset_path, train_path, val_path, test_path = get_dataset_path(args)
+    train_path, val_path, test_path = get_dataset_path(args)
     category_names = processing_dataset(train_path, val_path, test_path)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -220,9 +220,9 @@ if __name__=='__main__':
         criterion = nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(params = model.parameters(), lr = args["learning_rate"], weight_decay=1e-6)
         num_epochs = args["num_epochs"]
-        train_loader, val_loader, test_loader = load_all_dataset(train_path, val_path, test_path, dataset_path, category_names, collate_fn, args)
+        train_loader, val_loader, test_loader = load_all_dataset(train_path, val_path, test_path, dataset_path, collate_fn, args)
         train(num_epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
 
     if args['mode'] == 'test':
-        test_loader = load_test_dataset(test_path, dataset_path, category_names, collate_fn, args)
+        test_loader = load_test_dataset(test_path, dataset_path, collate_fn, args)
     load_model_submission(test_loader, device, args)

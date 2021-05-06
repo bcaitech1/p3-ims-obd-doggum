@@ -35,7 +35,7 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
             # step 주기에 따른 loss, mIoU 출력
             if (step + 1) % 25 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, mIoU: {:.4f}'.format(
-                    epoch+1, num_epochs, step+1, len(data_loader), loss.item(), mIoU))
+                    epoch+1, num_epochs, step+1, len(train_loader), loss.item(), mIoU))
         one_epochs_time = time.time() - now
         print('Epoch [{}/{}], time: {:.4f}'.format(epoch+1, num_epochs, one_epochs_time))
         # validation 주기에 따른 loss 출력 및 best model 저장
