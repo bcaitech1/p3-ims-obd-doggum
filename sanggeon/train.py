@@ -18,26 +18,45 @@ from visualize.showplots import showImageMask
 from network.utils import get_model
 from loss.optimizer import get_optimizer
 from loss.utils import get_loss
+from config import Config
 
 
-# Argument Parser
-parser = argparse.ArgumentParser(description='Semantic Segmentation')
-parser.add_argument('--lr', type=float, default=0.0001)
-parser.add_argument('--epochs', type=int, default=20)
-parser.add_argument('--batch_size', type=int, default=16)
-parser.add_argument('--seed', type=int, default=21)
-parser.add_argument('--eval', type=bool, default=False)
-parser.add_argument('--augmentation', type=str, default='CustomAugmentation3')
-parser.add_argument('--criterion', type=str, default='cross_entropy')
-parser.add_argument('--optimizer', type=str, default='adam')
-parser.add_argument('--model', type=str, default='unetmnv2')
-parser.add_argument('--continue_load', type=str, default='')
-parser.add_argument('--evalload', type=str, default='miou')
+def get_config():
+    # Argument Parser
+    parser = argparse.ArgumentParser(description='Semantic Segmentation')
+    parser.add_argument('--lr', type=float, default=0.0001)
+    parser.add_argument('--epochs', type=int, default=20)
+    parser.add_argument('--batch_size', type=int, default=8)
+    parser.add_argument('--seed', type=int, default=21)
+    parser.add_argument('--eval', type=bool, default=False)
+    parser.add_argument('--augmentation', type=str, default='CustomAugmentation3')
+    parser.add_argument('--criterion', type=str, default='cross_entropy')
+    parser.add_argument('--optimizer', type=str, default='adam')
+    parser.add_argument('--model', type=str, default='unetmnv2')
+    parser.add_argument('--continue_load', type=str, default='')
+    parser.add_argument('--eval_load', type=str, default='miou')
 
-# Container environment
-parser.add_argument("--dataset_path", type=str, default= '../input/data')
+    # Container environment
+    parser.add_argument("--dataset_path", type=str, default= '../input/data')
 
-args = parser.parse_args()
+    args = parser.parse_args()
+
+    config = Config(
+        lr=args.lr,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        seed=args.seed,
+        eval=args.eval,
+        augmentation=args.augmentation,
+        criterion=args.criterion,
+        optimizer=args.optimizer,
+        model=args.model,
+        continue_load=args.continue_load,
+        eval_load=args.eval_load,
+        dataset_path=args.dataset_path
+    )
+
+    return config
 
 
 def seed_everything(seed):
@@ -50,12 +69,12 @@ def seed_everything(seed):
     random.seed(seed)
     
 
-def main():
+def main(config):
     """
     Main Function
     :return:
     """
-    print(args)
+    print(config)
 
     print('pytorch version: {}'.format(torch.__version__))
     print('GPU 사용 가능 여부: {}'.format(torch.cuda.is_available()))
@@ -65,20 +84,20 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"  # GPU 사용 가능 여부에 따라 device 정보 저장
 
-    seed_everything(args.seed)
-    sorted_df = setup_loader(args)
+    seed_everything(config.seed)
+    sorted_df = setup_loader(config)
 
     # train.json / validation.json / test.json 디렉토리 설정
-    train_path = args.dataset_path + '/train.json'
-    val_path = args.dataset_path + '/val.json'
-    test_path = args.dataset_path + '/test.json'
+    train_path = config.dataset_path + '/train.json'
+    val_path = config.dataset_path + '/val.json'
+    test_path = config.dataset_path + '/test.json'
 
     # collate_fn needs for batch
     def collate_fn(batch):
         return tuple(zip(*batch))
 
-    augmentation_module = getattr(import_module("transforms.Augmentations"), args.augmentation)
-    # train_transform = get_augmentation(args, mode='train')
+    augmentation_module = getattr(import_module("transforms.Augmentations"), config.augmentation)
+    # train_transform = get_augmentation(config, mode='train')
     train_transform = augmentation_module(mode='train')
 
     val_transform = augmentation_module(mode='val')
@@ -117,30 +136,29 @@ def main():
 
     # DataLoader
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
-                                               batch_size=args.batch_size,
+                                               batch_size=config.batch_size,
                                                shuffle=True,
-                                               num_workers=4,
+                                               num_workers=2,
                                                collate_fn=collate_fn,
                                                drop_last = True)
 
     val_loader = torch.utils.data.DataLoader(dataset=val_dataset,
-                                             batch_size=args.batch_size,
+                                             batch_size=config.batch_size,
                                              shuffle=False,
                                              num_workers=2,
                                              collate_fn=collate_fn)
 
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
-                                              batch_size=args.batch_size,
+                                              batch_size=config.batch_size,
                                               num_workers=2,
                                               collate_fn=collate_fn)
 
-    # showImageMask(train_loader, list(sorted_df.Categories))
-    # showImageMask(val_loader, list(sorted_df.Categories))
+    showImageMask(train_loader, list(sorted_df.Categories))
+    showImageMask(val_loader, list(sorted_df.Categories))
     # showImageMask(test_loader, list(sorted_df.Categories), test=True)
-
     # 구현된 model에 임의의 input을 넣어 output이 잘 나오는지 test
 
-    model = get_model(args, num_classes=12)
+    model = get_model(config, num_classes=12)
     # x = torch.randn([1, 3, 512, 512])
     # print("input shape : ", x.shape)
     # out = model(x).to(device)
@@ -155,32 +173,32 @@ def main():
     if not os.path.isdir(saved_dir):
         os.mkdir(saved_dir)
 
-    if not args.eval:
-        criterion = get_loss(args)
-        optimizer = get_optimizer(args, model)
+    if not config.eval:
+        criterion = get_loss(config)
+        optimizer = get_optimizer(config, model)
 
-        if args.continue_load in ('miou', 'loss'):
+        if config.continue_load in ('miou', 'loss'):
 
-            if args.continue_load == 'miou':
+            if config.continue_load == 'miou':
                 # best model 저장된 경로
-                model_path = f'./saved/{args.model}_best_model_miou.pt'
-            elif args.contiue_load == 'loss':
+                model_path = f'./saved/{config.model}_best_model_miou.pt'
+            elif config.contiue_load == 'loss':
                 # best model 저장된 경로
-                model_path = f'./saved/{args.model}_best_model_loss.pt'
+                model_path = f'./saved/{config.model}_best_model_loss.pt'
 
             # best model 불러오기
             checkpoint = torch.load(model_path, map_location=device)
             model.load_state_dict(checkpoint)
 
 
-        train(args.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
+        train(config.epochs, model, train_loader, val_loader, criterion, optimizer, saved_dir, val_every, device)
 
-    if args.evalload == 'miou':
+    if config.eval_load == 'miou':
         # best model 저장된 경로
-        model_path = f'./saved/{args.model}_best_model_miou.pt'
-    elif args.evalload == 'loss':
+        model_path = f'./saved/{config.model}_best_model_miou.pt'
+    elif config.eval_load == 'loss':
         # best model 저장된 경로
-        model_path = f'./saved/{args.model}_best_model_loss.pt'
+        model_path = f'./saved/{config.model}_best_model_loss.pt'
     else:
         print('must choice miou / loss')
 
@@ -208,7 +226,7 @@ def main():
     # submission.csv로 저장
     tm = time.gmtime()
     time_string = time.strftime('%yy%mm%dd_%H_%M_%S', tm)
-    submission.to_csv(f"./submission/{args.model}_{time_string}.csv", index=False)
+    submission.to_csv(f"./submission/{config.model}_{time_string}.csv", index=False)
 
 
 def save_model(model, saved_dir, file_name='SegNet_best_model.pt'):
@@ -245,7 +263,7 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                     epoch + 1, num_epochs, step + 1, len(data_loader), loss.item()))
 
         # if (epoch + 1) == 6:
-        #     save_model(model, saved_dir, f'{args.model}_best_model6.pt')
+        #     save_model(model, saved_dir, f'{config.model}_best_model6.pt')
         # validation 주기에 따른 loss 출력 및 best model 저장
         if (epoch + 1) % val_every == 0:
             avrg_loss, avrg_mIoU = validation(epoch + 1, model, val_loader, criterion, device)
@@ -253,13 +271,13 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
                 best_loss = avrg_loss
-                save_model(model, saved_dir, f'{args.model}_best_model_loss.pt')
+                save_model(model, saved_dir, f'{config.model}_best_model_loss.pt')
 
             if avrg_mIoU > best_mIoU:
                 print('Best performance at epoch: {}'.format(epoch + 1))
                 print('Save model in', saved_dir)
                 best_mIoU = avrg_mIoU
-                save_model(model, saved_dir, f'{args.model}_best_model_miou.pt')
+                save_model(model, saved_dir, f'{config.model}_best_model_miou.pt')
 
 
 def validation(epoch, model, data_loader, criterion, device):
@@ -288,7 +306,6 @@ def validation(epoch, model, data_loader, criterion, device):
 
         acc, acc_cls, mIoU, fwavacc = label_accuracy_score(hist)
         avrg_loss = total_loss / cnt
-        mIoU = label_accuracy_score(hist)
         print('Validation #{}  Average Loss: {:.4f}, mIoU: {:.4f}'.format(epoch, avrg_loss,
                                                                           mIoU))
 
@@ -332,4 +349,5 @@ def test(model, data_loader, device):
     return file_names, preds_array
 
 if __name__ == '__main__':
-    main()
+    config = get_config()
+    main(config)
