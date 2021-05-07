@@ -136,3 +136,29 @@ class CustomAugmentation5:
 
     def __call__(self, **kwargs):
         return self.transform(**kwargs)
+
+
+class CustomAugmentation6:
+    def __init__(self, mode:str='train',  **kwargs):
+        if mode == 'train':
+            self.transform = A.Compose([
+                A.Rotate(limit=30),
+                A.CropNonEmptyMaskIfExists(height=256, width=256, p=0.5),
+                A.Resize(height=512, width=512, p=1.0),
+                A.CLAHE(p=0.5),
+                A.HorizontalFlip(p=0.5),
+                A.Normalize(mean=(0.548, 0.504, 0.479), std=(0.237, 0.247, 0.246),
+                            max_pixel_value=255.0, p=1.0),
+                ToTensorV2(transpose_mask=True)
+            ])
+        elif mode in ('val', 'test'):
+            self.transform = A.Compose([
+                A.Resize(height=512, width=512, p=1.0),
+                A.Normalize(mean=(0.548, 0.504, 0.479), std=(0.237, 0.247, 0.246),
+                            max_pixel_value=255.0, p=1.0),
+                ToTensorV2(transpose_mask=True)
+            ])
+
+
+    def __call__(self, **kwargs):
+        return self.transform(**kwargs)
