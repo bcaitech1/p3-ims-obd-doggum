@@ -7,9 +7,12 @@ from importlib import import_module
 warnings.filterwarnings('ignore')
 
 import torch
+import torch.nn.functional as F
 import numpy as np
 from tqdm import tqdm
 import pandas as pd
+import pydensecrf.densecrf as dcrf
+from pydensecrf.utils import unary_from_softmax, create_pairwise_bilateral
 
 from datasets.data_loader import setup_loader
 from utils.utils import add_hist, label_accuracy_score
@@ -19,6 +22,7 @@ from network.utils import get_model
 from loss.optimizer import get_optimizer
 from loss.utils import get_loss
 from config import Config
+from transforms.Augmentations import invTrans
 
 
 def get_config():
@@ -34,7 +38,7 @@ def get_config():
     parser.add_argument('--optimizer', type=str, default='adam')
     parser.add_argument('--model', type=str, default='unetmnv2')
     parser.add_argument('--continue_load', type=str, default='')
-    parser.add_argument('--eval_load', type=str, default='miou')
+    parser.add_argument('--eval_load', type=str, default='')
 
     # Container environment
     parser.add_argument("--dataset_path", type=str, default= '../input/data')
@@ -173,7 +177,7 @@ def main(config):
     if not os.path.isdir(saved_dir):
         os.mkdir(saved_dir)
 
-    if not config.eval:
+    if config.eval_load == '':
         criterion = get_loss(config)
         optimizer = get_optimizer(config, model)
 
@@ -210,6 +214,12 @@ def main(config):
     # 추론을 실행하기 전에는 반드시 설정 (batch normalization, dropout 를 평가 모드로 설정)
     model.eval()
     showImageMask(test_loader, list(sorted_df.Categories), test=True, model=model, device=device)
+
+    # 그냥 쌩으로 모델 불러온거면 테스트해보기.
+    if config.eval_load != '':
+        criterion = get_loss(config)
+        validation(0, model, val_loader, criterion, device, crf=True)
+        return
 
     # sample_submisson.csv 열기
     submission = pd.read_csv('./submission/sample_submission.csv', index_col=None)
@@ -280,7 +290,42 @@ def train(num_epochs, model, data_loader, val_loader, criterion, optimizer, save
                 save_model(model, saved_dir, f'{config.model}_best_model_miou.pt')
 
 
-def validation(epoch, model, data_loader, criterion, device):
+
+'''
+# Default Values are
+apperance_kernel = [8, 164, 100] # PairwiseBilateral [sxy, srgb, compat]  
+spatial_kernel = [3, 10]         # PairwiseGaussian  [sxy, compat] 
+
+# or if you want to to specify seprately for each XY direction and RGB color channel then
+
+apperance_kernel = [(1.5, 1.5), (64, 64, 64), 100] # PairwiseBilateral [sxy, srgb, compat]  
+spatial_kernel = [(0.5, 0.5), 10]                  # PairwiseGaussian  [sxy, compat] 
+'''
+# https://www.programcreek.com/python/example/106424/pydensecrf.densecrf.DenseCRF2D
+h, w = 512, 512
+
+
+def dense_crf(probs, img=None, n_classes=12, n_iters=10, scale_factor=1):
+    c, h, w = probs.shape
+
+    if img is not None:
+        assert (img.shape[1:3] == (h, w))
+        img = np.transpose(img, (1, 2, 0)).copy(order='C')
+        img = np.uint8(255 * img)
+
+    d = dcrf.DenseCRF2D(w, h, n_classes)  # Define DenseCRF model.
+
+    unary = unary_from_softmax(probs)
+    unary = np.ascontiguousarray(unary)
+    d.setUnaryEnergy(unary)
+    d.addPairwiseGaussian(sxy=(3, 3), compat=10)
+    d.addPairwiseBilateral(sxy=10, srgb=5, rgbim=np.copy(img), compat=10)
+    Q = d.inference(n_iters)
+
+    preds = np.array(Q, dtype=np.float32).reshape((n_classes, h, w))
+    return preds
+
+def validation(epoch, model, data_loader, criterion, device, crf:bool=False):
     print('Start validation #{}'.format(epoch))
     model.eval()
     with torch.no_grad():
@@ -300,7 +345,17 @@ def validation(epoch, model, data_loader, criterion, device):
             total_loss += loss
             cnt += 1
 
-            outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
+            if crf == False:
+                outputs = torch.argmax(outputs.squeeze(), dim=1).detach().cpu().numpy()
+            else:
+                probs_array = []
+                for image, prob in zip(images, outputs):
+                    prob = F.softmax(prob, dim=0)
+                    prob = dense_crf(img=np.around(invTrans(image).cpu().numpy()).astype(float),
+                                     probs=prob.cpu().numpy())
+                    probs_array += [np.argmax(prob, axis=0)]
+
+                outputs = np.array(probs_array)
 
             hist = add_hist(hist, masks.detach().cpu().numpy(), outputs, n_class=n_class)
 
@@ -328,7 +383,14 @@ def test(model, data_loader, device):
 
             # inference (512 x 512)
             outs = model(torch.stack(imgs).to(device))
-            oms = torch.argmax(outs.squeeze(), dim=1).detach().cpu().numpy()
+
+            probs_array = []
+            for image, prob in zip(imgs, outs):
+                prob = F.softmax(torch.from_numpy(prob), dim=0)
+                prob = dense_crf(img=np.around(InvNormalize(image).cpu().numpy()).astype(float), probs=prob.cpu().numpy())
+                probs_array += [np.argmax(prob, axis=0)]
+
+            oms = np.array(probs_array)
 
             # resize (256 x 256)
             temp_mask = []
@@ -339,7 +401,7 @@ def test(model, data_loader, device):
 
             oms = np.array(temp_mask)
 
-            oms = oms.reshape([oms.shape[0], size * size]).astype(int)
+            oms = np.around(oms.reshape([oms.shape[0], size * size]).astype(int))
             preds_array = np.vstack((preds_array, oms))
 
             file_name_list.append([i['file_name'] for i in image_infos])

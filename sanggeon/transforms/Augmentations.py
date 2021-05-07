@@ -1,6 +1,13 @@
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+from torchvision import transforms
 import cv2
+
+invTrans = transforms.Compose([ transforms.Normalize(mean = [ 0., 0., 0. ],
+                                                     std = [ 1/0.229, 1/0.224, 1/0.225 ]),
+                                transforms.Normalize(mean = [ -0.485, -0.456, -0.406 ],
+                                                     std = [ 1., 1., 1. ]),
+                               ])
 
 
 class TestAugmentation:
