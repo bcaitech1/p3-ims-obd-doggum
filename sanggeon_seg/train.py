@@ -157,8 +157,8 @@ def main(config):
                                               num_workers=2,
                                               collate_fn=collate_fn)
 
-    showImageMask(train_loader, list(sorted_df.Categories))
-    showImageMask(val_loader, list(sorted_df.Categories))
+    # showImageMask(train_loader, list(sorted_df.Categories))
+    # showImageMask(val_loader, list(sorted_df.Categories))
     # showImageMask(test_loader, list(sorted_df.Categories), test=True)
     # 구현된 model에 임의의 input을 넣어 output이 잘 나오는지 test
 
