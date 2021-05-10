@@ -7,6 +7,8 @@ from torchvision.transforms import transforms
 plt.rcParams['axes.grid'] = False
 
 def showImageMask(data_loader, category_names, test:bool=False, model=None, device=None):
+    plt.rcParams['axes.grid'] = False
+
     invTrans = transforms.Compose([transforms.Normalize(mean=[0., 0., 0.],
                                                         std=[1 / 0.229, 1 / 0.224, 1 / 0.225]),
                                    transforms.Normalize(mean=[-0.485, -0.456, -0.406],
@@ -74,3 +76,44 @@ def showImageMask(data_loader, category_names, test:bool=False, model=None, devi
         ax2.set_title("masks : {}".format(image_infos['file_name']), fontsize=15)
 
     plt.show()
+
+def showImageMask_tta(data_loader, category_names, tta_model, device):
+    plt.rcParams['axes.grid'] = False
+
+    invTrans = transforms.Compose([transforms.Normalize(mean=[0., 0., 0.],
+                                                        std=[1 / 0.229, 1 / 0.224, 1 / 0.225]),
+                                   transforms.Normalize(mean=[-0.485, -0.456, -0.406],
+                                                        std=[1., 1., 1.]),
+                                   ])
+
+
+    for imgs, masks, image_infos in data_loader:
+        input_image = torch.stack(imgs)
+        input_masks = masks
+        print(input_image.shape)
+
+        tta_model.eval()
+        # inference
+        outs = tta_model(input_image.to(device))
+        oms = torch.argmax(outs.squeeze(), dim=1).detach().cpu().numpy()
+
+        break
+
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(12, 12))
+
+    ax1.imshow(invTrans(input_image[1]).permute([1, 2, 0]))
+    ax1.grid(False)
+    ax1.set_title("input image : {}".format(image_infos[1]['file_name']), fontsize=15)
+
+    ax2.imshow(masks[1])
+    ax2.grid(False)
+    ax2.set_title("input image : {}".format(image_infos[1]['file_name']), fontsize=15)
+
+    ax3.imshow(oms[1])
+    ax3.grid(False)
+    ax3.set_title("Predicted : {}".format(image_infos[1]['file_name']), fontsize=15)
+
+    plt.show()
+
+
+    return

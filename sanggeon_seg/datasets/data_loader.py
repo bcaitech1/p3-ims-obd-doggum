@@ -68,7 +68,7 @@ def setup_loader(args):
     plot_1 = sns.barplot(x="Number of annotations", y="Categories", data=df, label="Total", color="b")
     # pd.options.display.max_rows = 4000
     # display(plot_1)
-    plt.show()
+    # plt.show()
 
     # category labeling
     sorted_temp_df = df.sort_index()
