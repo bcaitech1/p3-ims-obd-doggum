@@ -1,7 +1,13 @@
+import os
+import random
+
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torchvision import transforms
 import cv2
+import torch
+from glob import glob
+
 
 invTrans = transforms.Compose([ transforms.Normalize(mean = [ 0., 0., 0. ],
                                                      std = [ 1/0.229, 1/0.224, 1/0.225 ]),
@@ -169,3 +175,40 @@ class CustomAugmentation6:
 
     def __call__(self, **kwargs):
         return self.transform(**kwargs)
+
+
+class CustomAugmentation7:
+    def __init__(self, mode:str='train',  **kwargs):
+        self.transform = A.Compose([
+            # A.Rotate(p=1.0, limit=(-90,90)),
+            # A.VerticalFlip(p=0.5),
+            # A.HorizontalFlip(p=0.8),
+            ToTensorV2(transpose_mask=True)
+        ])
+
+
+    def __call__(self, **kwargs):
+        return self.transform(**kwargs)
+
+
+class CustomAugmentation8:
+    def __init__(self, mode:str='train'):
+        self.transform = A.Compose([
+            A.Rotate(p=1.0, limit=(-90,90)),
+            A.VerticalFlip(p=0.5),
+            A.HorizontalFlip(p=0.8),
+            ToTensorV2(transpose_mask=True)
+        ])
+        self.backgrounds = glob(os.path.join('../input/data', 'backgrounds_sample/') + '*.jpg')
+        self.backgrounds_len = len(self.backgrounds)
+
+
+    def __call__(self, image, mask):
+        transformed = self.transform(image=image, mask=mask)
+        image = transformed['image']
+        mask = transformed['mask']
+        bgint = random.randint(0,self.backgrounds_len-1)
+        background = cv2.cvtColor(cv2.imread(self.backgrounds[bgint]), cv2.COLOR_BGR2RGB)
+        background = self.transform(image=background)['image']
+        other_background = torch.where(mask > 0, image, background)
+        return {'image': torch.tensor(other_background,dtype=torch.uint8), 'mask': mask}
