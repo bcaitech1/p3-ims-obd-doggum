@@ -199,7 +199,7 @@ class CustomAugmentation8:
             A.HorizontalFlip(p=0.8),
             ToTensorV2(transpose_mask=True)
         ])
-        self.backgrounds = glob(os.path.join('../input/data', 'backgrounds_sample/') + '*.jpg')
+        self.backgrounds = glob(os.path.join('../input/data', 'results_splits/') + '*.jpg')
         self.backgrounds_len = len(self.backgrounds)
 
 
@@ -212,3 +212,18 @@ class CustomAugmentation8:
         background = self.transform(image=background)['image']
         other_background = torch.where(mask > 0, image, background)
         return {'image': torch.tensor(other_background,dtype=torch.uint8), 'mask': mask}
+
+
+class CustomAugmentation9:
+    def __init__(self, mode:str='train',  **kwargs):
+        self.transform = A.Compose([
+            # A.Rotate(p=1.0, limit=(-90,90)),
+            # A.VerticalFlip(p=0.5),
+            # A.HorizontalFlip(p=0.8),
+            A.ShiftScaleRotate(p=1.0, shift_limit=(-0.0,0.0), scale_limit=(0.05,0.05), rotate_limit=(0,0)),
+            ToTensorV2(transpose_mask=True)
+        ])
+
+
+    def __call__(self, **kwargs):
+        return self.transform(**kwargs)
