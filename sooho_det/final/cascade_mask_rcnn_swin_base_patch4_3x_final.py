@@ -75,5 +75,7 @@ model = dict(
                 loss_cls=dict(
                     type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
                 loss_bbox=dict(type='GIoULoss', loss_weight=10.0))
-        ]))
-
+        ],
+    mask_head=dict(
+        num_classes=11
+    )))
