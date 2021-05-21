@@ -1,12 +1,17 @@
+### 들어가기 전에..
+사용한 라이브러리  
+https://github.com/open-mmlab/mmdetection  
+https://github.com/SwinTransformer/Swin-Transformer-Object-Detection
+
 # ai tech boostcamp
-# P-stage 3-1 (object segmentation)
-## 재활용 품목 분류를 위한 Semantic Segmentation
+# P-stage 3-2 (object detection)
+## 재활용 품목 분류를 위한 Object Detection
 
 ![img.png](files/img.png)
 
 바야흐로 대량 생산, 대량 소비의 시대. 우리는 많은 물건이 대량으로 만들어져 쏟아져 나오고, 그에 따라 대량으로 소비되는 시대를 살고 있습니다. 하지만 이러한 문화는 심각한 쓰레기 문제를 낳고 있습니다. '쓰레기 대란', '매립지 부족'과 같은 표현을 뉴스에서 듣는 빈도가 점점 늘어나고 있다는 것만으로도 그 문제가 얼마나 심각한지 알 수 있죠.
 
-![img_2.png](files/img_2.png)
+![img_1.png](files/img_1.png)
 
 이러한 환경 부담을 조금이나마 줄일 수 있는 방법의 하나로 '분리수거'가 있습니다. 잘 분리배출 된 쓰레기는 자원으로서 가치를 인정받아 재활용되지만, 잘못 분리배출 되면 그대로 폐기물로 분류되어 매립, 소각되기 때문입니다. 우리나라의 분리 수거율은 굉장히 높은 것으로 알려져 있고, 또 최근 이러한 쓰레기 문제가 주목받으며 더욱 많은 사람이 분리수거에 동참하려 하고 있습니다. 하지만 '이 쓰레기가 어디에 속하는지', '어떤 것들을 분리해서 버리는 것이 맞는지' 등 정확한 분리수거 방법을 알기 어렵다는 문제점이 있습니다.
 
@@ -29,8 +34,8 @@
 
 * 이미지 크기 : (512, 512)
 
-###예제) image, target 시각화 및 pixel 별로 예측해야할 12개의 classes
-![img_3.png](files/img_3.png)
+###예제) image, target 시각화 
+![img_2.png](files/img_2.png)
 
 ### annotation file
 
@@ -63,14 +68,14 @@ coco format은 크게 2가지 (images, annotations)의 정보를 가지고 있�
     * image_id: annotation이 표시된 이미지 고유 id
 
 ### Segmentation competition에서 사용되는 데이터의 전체 구성
-![img_4.png](files/img_4.png)
+![img_3.png](files/img_3.png)
 
 ### 공개 데이터
 
 * batch_01_vt / batch_02_vt / batch_03 → train / validation / test set 들의 이미지들이 섞여서 존재
 
 * tarin_all.json / train.json / val.json / test.json → 아래 표 참고
-![img_5.png](files/img_5.png)
+![img_4.png](files/img_4.png)
 즉, 전체 데이터의 80%에 해당되는 이미지는 학습하는데 활용이 되며, 20%는 test dataset 입니다.
 
 teste dataset은 최종적 리더보드 점수에 활용이 되며, 이 중 50%는 public 리더보드 점수에 활용이 됩니다.
@@ -78,7 +83,50 @@ teste dataset은 최종적 리더보드 점수에 활용이 되며, 이 중 50%�
 제공된 데이터 외의 외부 데이터를 활용하는 것은 금지됩니다. Test 데이터를 학습에 활용하시는 것은 가능합니다.
 
 ### 베이스라인 코드 설명
-Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagenet data set으로 미리 학습된 weight를 사용하여 구성된 FCN8s model을 바탕으로 작성 되었습니다.
+#### train
+1. terminal 에서 mmdetection_trash folder로 이동
+2. train 명령어  
+   python tools/train.py `[config_file]` `[config_file]`: train 시킬 model의 config 파일
+   ex) configs/trash/faster_rcnn/faster_rcnn_r50_fpn_1x_trash.py
+
+ex) python tools/train.py configs/trash/faster_rcnn/faster_rcnn_r50_fpn_1x_trash.py
+
+3. 로그 확인  
+   tail -f work_dirs/`[config_filename]`/`[2xxx]`.log   
+   `[config_filename]`: 실행시킨 config 파일의 이름 ex) faster_rcnn_r50_fpn1x_trash  
+   `[2xxxx]`: log가 기록되기 시작한 시각 (폴더 안에서 파일 확인 가능)
+
+ex) tail -f  
+work_dirs/faster_rcnn_r50_fpn_1x_trash/2xxx.log
+
+#### inference
+1.inference 명령어  
+python tools/test.py `[config_file]` `[model_wieght_path]` —out `[output_filepath]`  
+`[config_file]`: inference 할 model의 config 파일  
+ex) configs/trash/faster_rcnn/faster_rcnn_r50_fpn_1x_trash.py  
+`[model_weight_path]`: 저장된 model의 weight [output_filepath]: model이 예측한 output file (.pkl) 을 저장할 경로  
+
+ex) 
+```
+python tools/test.py configs/trash/faster_rcnn/faster_rcnn_r50_fpn_1x_trash.py \ 
+work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch12.pth \
+--out work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch12.pkl
+```
+
+위의 명령어 입력시 output file이 work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch_12.pkl 에 저장됩니다.
+
+2. make submission 명령어  
+   python pkl_to_submission.py --pkl `[output_filepath]` --csv `[submission_filepath]`  
+   `[output_filepath]`: 1번에서 저장한 pkl file path  
+   `[submission_filepath]`: submission file을 저장할 위치
+
+ex)
+```
+python pkl_to_submission.py --pkl work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch_12.pkl --csv submission.csv
+```
+위의 명령어 입력 시 mmdetection_trash 폴더 안에 submission.csv 생성
+
+3. submit!!!!!
 
 ### Components
 
@@ -104,58 +152,42 @@ Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagen
 
     * 설명 : baseline을 돌리기 위해 필요한 library 들이 기입되어 있습니다.
 
-### How to use?
-
-1. 데이터셋 다운로드
-
+### How to install?
+1. 데이터 다운로드
     * data 구성
-![img_6.png](files/img_6.png)
+    ![img_5.png](files/img_5.png)
       
-
 2. 라이브러리 설치
+    * 아래의 경로를 확인하여 코드 합축을 푼 후 `code` 폴더를 아래와 같은 위치에 구성해주세요.
+    ![img_6.png](files/img_6.png)
+      
+    * `mmdetection_trash`로 들어가서 아래 명령어를 실행해 필요한 라이브러리를 설치해 줍니다.
+    
+   
+```
+conda install pytorch=1.6.0 cudatoolkit=10.1 torchvision -c pytorch
 
-    * 아래의 경로를 확인하여 `code.zip` 압축을 푼 후 `code`폴더를 아래와 같은 위치에 구성해주세요
-![img_7.png](files/img_7.png)
+pip install mmcv-full -f <https://download.openmmlab.com/mmcv/dist/cu101/torch1.6.0/index.html>
 
-    * code로 들어가서 아래 명령어를 실행해 필요한 라이브러리를 설치해 줍니다.
+pip install -r requirements.txt
 
-    ```
-    pip install -r requirements.txt
-    ```
-
-3. `code/FCN8s baseline (VGG imageNet weight).ipynb` 실행
-
-    1. 하이퍼파라미터 세팅 및 seed 고정
-
-    2. 학습 데이터 EDA
-
-    3. 데이터 전처리 함수 정의 (Dataset)
-
-    4. Dataset 정의 및 DataLoader 할당
-
-        1. 데이터 샘플 시각화 (Show example image and mask)
-
-    5. baseline model
-
-        1.   FCN8s (VGG imageNet weight)
-
-    6. train, validation, test 함수 정의
-
-    7. 모델 저장 함수 정의
-
-    8. 모델 생성 및 Loss function, Optimizer 정의
-
-    9. 저장된 model 불러오기 (학습된 이후)
-
-    10. submission을 위한 test 함수 정의
-
-    11. submission.csv 생성
-
-4. `code/submission/submission.csv` 제출
+pip install -v -e .
+```
 
 ## 렙업 레포트
-![files/pstage3%20seg%20랩업_Page_1.png](files/pstage3%20seg%20랩업_Page_1.png)  
-![files/pstage3%20seg%20랩업_Page_2.png](files/pstage3%20seg%20랩업_Page_2.png)  
-![files/pstage3%20seg%20랩업_Page_3.png](files/pstage3%20seg%20랩업_Page_3.png)  
-![files/pstage3%20seg%20랩업_Page_4.png](files/pstage3%20seg%20랩업_Page_4.png)  
-![files/pstage3%20seg%20랩업_Page_5.png](files/pstage3%20seg%20랩업_Page_5.png)
+![files/pstage3%20obd%20랩업_Page_1.png](files/pstage3%20obd%20랩업_Page_1.png)  
+![files/pstage3%20obd%20랩업_Page_2.png](files/pstage3%20obd%20랩업_Page_2.png)  
+![files/pstage3%20obd%20랩업_Page_3.png](files/pstage3%20obd%20랩업_Page_3.png)  
+![files/pstage3%20obd%20랩업_Page_4.png](files/pstage3%20obd%20랩업_Page_4.png)  
+
+## 피어세션 발표
+![files/P-stage3%20obd%20발표용_Page_1.png](files/P-stage3%20obd%20발표용_Page_1.png)  
+![files/P-stage3%20obd%20발표용_Page_2.png](files/P-stage3%20obd%20발표용_Page_2.png)  
+![files/P-stage3%20obd%20발표용_Page_3.png](files/P-stage3%20obd%20발표용_Page_3.png)  
+![files/P-stage3%20obd%20발표용_Page_4.png](files/P-stage3%20obd%20발표용_Page_4.png)  
+![files/P-stage3%20obd%20발표용_Page_5.png](files/P-stage3%20obd%20발표용_Page_5.png)  
+![files/P-stage3%20obd%20발표용_Page_6.png](files/P-stage3%20obd%20발표용_Page_6.png)  
+![files/P-stage3%20obd%20발표용_Page_7.png](files/P-stage3%20obd%20발표용_Page_7.png)  
+![files/P-stage3%20obd%20발표용_Page_8.png](files/P-stage3%20obd%20발표용_Page_8.png)  
+![files/P-stage3%20obd%20발표용_Page_9.png](files/P-stage3%20obd%20발표용_Page_9.png)  
+![files/P-stage3%20obd%20발표용_Page_10.png](files/P-stage3%20obd%20발표용_Page_10.png)  
