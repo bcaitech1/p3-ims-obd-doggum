@@ -1,0 +1,647 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>🧪 P-stage3 seg 실험들 기록</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="b603e473-1a20-405a-ba74-a635d80d06ba" class="page sans"><header><h1 class="page-title">🧪 P-stage3 seg 실험들 기록</h1><table class="properties"><tbody><tr class="property-row property-row-person"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesPerson"><path d="M9.625,10.8465 C8.91187,10.2891 8.12088,9.926 7,9.26013 L7,8.71938 C7.21175,8.47612 7.392,8.176 7.53813,7.83213 C7.94587,7.7315 8.3125,7.33425 8.3125,7 C8.3125,6.51788 8.1095,6.32713 7.8715,6.17137 C7.8715,6.15562 7.875,6.14162 7.875,6.125 C7.875,5.41362 7.4375,3.5 5.25,3.5 C3.0625,3.5 2.625,5.4145 2.625,6.125 C2.625,6.14162 2.6285,6.15562 2.6285,6.17137 C2.3905,6.32713 2.1875,6.51788 2.1875,7 C2.1875,7.33425 2.55413,7.7315 2.96187,7.833 C3.108,8.176 3.28825,8.47612 3.5,8.71938 L3.5,9.26013 C2.37912,9.92513 1.58812,10.2882 0.875,10.8465 C0.041125,11.4984 0,12.4688 0,14 L10.5,14 C10.5,12.4688 10.4589,11.4984 9.625,10.8465 Z M13.125,7.3465 C12.4119,6.78912 11.6209,6.426 10.5,5.76013 L10.5,5.21938 C10.7118,4.97613 10.892,4.676 11.0381,4.33213 C11.4459,4.2315 11.8125,3.83425 11.8125,3.5 C11.8125,3.01787 11.6095,2.82713 11.3715,2.67138 C11.3715,2.65562 11.375,2.64162 11.375,2.625 C11.375,1.91363 10.9375,0 8.75,0 C6.5625,0 6.125,1.9145 6.125,2.625 C6.125,2.64162 6.1285,2.65562 6.1285,2.67138 C6.11188,2.68275 6.09787,2.69588 6.08125,2.70725 C7.83212,3.066 8.59688,4.54825 8.72813,5.74787 C8.97575,6.00863 9.1875,6.39625 9.1875,7 C9.1875,7.60288 8.771,8.20312 8.18388,8.51462 C8.127,8.624 8.06662,8.729 8.00275,8.82962 C8.155,8.91537 8.30025,8.99675 8.44025,9.07463 C9.08075,9.4325 9.63375,9.74137 10.164,10.1561 C10.3022,10.2638 10.4204,10.3801 10.5289,10.4991 L14,10.4991 C14,8.96875 13.9589,7.99837 13.125,7.3465 Z"></path></svg></span>Assign</th><td><span class="user"><img src="https://lh3.googleusercontent.com/a-/AOh14GiYSQv294mv8oLWscsCj7i-B_fcdtouAnqGfvQyJHo=s100" class="icon user-icon"/>상건 이</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>Link</th><td></td></tr><tr class="property-row property-row-file"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesFile"><path d="M5.94578,14 C4.62416,14 3.38248,13.4963 2.44892,12.585 C1.514641,11.6736 1,10.4639 1,9.17405 C1.00086108,7.88562 1.514641,6.67434 2.44892,5.76378 L7.45612,0.985988 C8.80142,-0.327216 11.1777,-0.332396 12.5354,0.992848 C13.9369,2.36163 13.9369,4.58722 12.5354,5.95418 L8.03046,10.2414 C7.16278,11.0877 5.73682,11.0894 4.86024,10.2345 C3.98394,9.37789 3.98394,7.98769 4.86024,7.1327 L6.60422,5.4317 L7.87576,6.67196 L6.13177,8.37297 C6.01668,8.48539 6.00003,8.61545 6.00003,8.68335 C6.00003,8.75083 6.01668,8.88103 6.13177,8.99429 C6.36197,9.21689 6.53749,9.21689 6.76768,8.99429 L11.2707,4.70622 C11.9645,4.03016 11.9645,2.91757 11.2638,2.23311 C10.5843,1.57007 9.40045,1.57007 8.72077,2.23311 L3.71342,7.0109 C3.12602,7.58406 2.79837,8.35435 2.79837,9.17405 C2.79837,9.99459 3.12602,10.7654 3.72045,11.3446 C4.90947,12.5062 6.98195,12.5062 8.17096,11.3446 L10.41911,9.15165 L11.6906,10.3919 L9.4425,12.585 C8.50808,13.4963 7.2664,14 5.94578,14 Z"></path></svg></span>Media</th><td></td></tr><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Property</th><td></td></tr><tr class="property-row property-row-date"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesDate"><path d="M10.8889,5.5 L3.11111,5.5 L3.11111,7.05556 L10.8889,7.05556 L10.8889,5.5 Z M12.4444,1.05556 L11.6667,1.05556 L11.6667,0 L10.1111,0 L10.1111,1.05556 L3.88889,1.05556 L3.88889,0 L2.33333,0 L2.33333,1.05556 L1.55556,1.05556 C0.692222,1.05556 0.00777777,1.75556 0.00777777,2.61111 L0,12.5 C0,13.3556 0.692222,14 1.55556,14 L12.4444,14 C13.3,14 14,13.3556 14,12.5 L14,2.61111 C14,1.75556 13.3,1.05556 12.4444,1.05556 Z M12.4444,12.5 L1.55556,12.5 L1.55556,3.94444 L12.4444,3.94444 L12.4444,12.5 Z M8.55556,8.61111 L3.11111,8.61111 L3.11111,10.1667 L8.55556,10.1667 L8.55556,8.61111 Z"></path></svg></span>Publication Date</th><td><time>@Apr 26, 2021</time></td></tr><tr class="property-row property-row-select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesSelect"><path d="M7,13 C10.31348,13 13,10.31371 13,7 C13,3.68629 10.31348,1 7,1 C3.68652,1 1,3.68629 1,7 C1,10.31371 3.68652,13 7,13 Z M3.75098,5.32278 C3.64893,5.19142 3.74268,5 3.90869,5 L10.09131,5 C10.25732,5 10.35107,5.19142 10.24902,5.32278 L7.15771,9.29703 C7.07764,9.39998 6.92236,9.39998 6.84229,9.29703 L3.75098,5.32278 Z"></path></svg></span>Status</th><td><span class="selected-value select-value-color-default">Idea 💡</span></td></tr><tr class="property-row property-row-select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesSelect"><path d="M7,13 C10.31348,13 13,10.31371 13,7 C13,3.68629 10.31348,1 7,1 C3.68652,1 1,3.68629 1,7 C1,10.31371 3.68652,13 7,13 Z M3.75098,5.32278 C3.64893,5.19142 3.74268,5 3.90869,5 L10.09131,5 C10.25732,5 10.35107,5.19142 10.24902,5.32278 L7.15771,9.29703 C7.07764,9.39998 6.92236,9.39998 6.84229,9.29703 L3.75098,5.32278 Z"></path></svg></span>Type</th><td><span class="selected-value select-value-color-blue">Blog Post</span></td></tr></tbody></table></header><div class="page-body"><div id="2b2dfc26-7083-4fb9-afc4-0196bf3842f1" class="collection-content"><h4 class="collection-title">Research</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesSelect"><path d="M7,13 C10.31348,13 13,10.31371 13,7 C13,3.68629 10.31348,1 7,1 C3.68652,1 1,3.68629 1,7 C1,10.31371 3.68652,13 7,13 Z M3.75098,5.32278 C3.64893,5.19142 3.74268,5 3.90869,5 L10.09131,5 C10.25732,5 10.35107,5.19142 10.24902,5.32278 L7.15771,9.29703 C7.07764,9.39998 6.92236,9.39998 6.84229,9.29703 L3.75098,5.32278 Z"></path></svg></span>작업자</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>name</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Model</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Augmentation</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>optimizer</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesNumber"><path d="M4.46191,0 C3.8667,0 3.38428,0.482422 3.38428,1.07751 L3.38428,3.38425 L1.07764,3.38425 C0.482422,3.38425 0,3.86667 0,4.46179 C0,5.05688 0.482422,5.53931 1.07764,5.53931 L3.38428,5.53931 L3.38428,8.46063 L1.07764,8.46063 C0.482422,8.46063 0,8.94308 0,9.53818 C0,10.1333 0.482422,10.6157 1.07764,10.6157 L3.38428,10.6157 L3.38428,12.9224 C3.38428,13.5175 3.8667,13.9999 4.46191,13.9999 C5.05664,13.9999 5.53906,13.5175 5.53906,12.9224 L5.53906,10.6157 L8.46045,10.6157 L8.46045,12.9224 C8.46045,13.5175 8.94287,13.9999 9.53809,13.9999 C10.1333,13.9999 10.6157,13.5175 10.6157,12.9224 L10.6157,10.6157 L12.9224,10.6157 C13.5176,10.6157 14,10.1333 14,9.53818 C14,8.94308 13.5176,8.46063 12.9224,8.46063 L10.6157,8.46063 L10.6157,5.53931 L12.9224,5.53931 C13.5176,5.53931 14,5.05688 14,4.46179 C14,3.86667 13.5176,3.38425 12.9224,3.38425 L10.6157,3.38425 L10.6157,1.07751 C10.6157,0.482422 10.1333,0 9.53809,0 C8.94287,0 8.46045,0.482422 8.46045,1.07751 L8.46045,3.38425 L5.53906,3.38425 L5.53906,1.07751 C5.53906,0.482422 5.05664,0 4.46191,0 Z M5.53906,8.46063 L5.53906,5.53931 L8.46045,5.53931 L8.46045,8.46063 L5.53906,8.46063 Z"></path></svg></span>epochs</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>settings</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>etc.</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesNumber"><path d="M4.46191,0 C3.8667,0 3.38428,0.482422 3.38428,1.07751 L3.38428,3.38425 L1.07764,3.38425 C0.482422,3.38425 0,3.86667 0,4.46179 C0,5.05688 0.482422,5.53931 1.07764,5.53931 L3.38428,5.53931 L3.38428,8.46063 L1.07764,8.46063 C0.482422,8.46063 0,8.94308 0,9.53818 C0,10.1333 0.482422,10.6157 1.07764,10.6157 L3.38428,10.6157 L3.38428,12.9224 C3.38428,13.5175 3.8667,13.9999 4.46191,13.9999 C5.05664,13.9999 5.53906,13.5175 5.53906,12.9224 L5.53906,10.6157 L8.46045,10.6157 L8.46045,12.9224 C8.46045,13.5175 8.94287,13.9999 9.53809,13.9999 C10.1333,13.9999 10.6157,13.5175 10.6157,12.9224 L10.6157,10.6157 L12.9224,10.6157 C13.5176,10.6157 14,10.1333 14,9.53818 C14,8.94308 13.5176,8.46063 12.9224,8.46063 L10.6157,8.46063 L10.6157,5.53931 L12.9224,5.53931 C13.5176,5.53931 14,5.05688 14,4.46179 C14,3.86667 13.5176,3.38425 12.9224,3.38425 L10.6157,3.38425 L10.6157,1.07751 C10.6157,0.482422 10.1333,0 9.53809,0 C8.94287,0 8.46045,0.482422 8.46045,1.07751 L8.46045,3.38425 L5.53906,3.38425 L5.53906,1.07751 C5.53906,0.482422 5.05664,0 4.46191,0 Z M5.53906,8.46063 L5.53906,5.53931 L8.46045,5.53931 L8.46045,8.46063 L5.53906,8.46063 Z"></path></svg></span>val loss</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesNumber"><path d="M4.46191,0 C3.8667,0 3.38428,0.482422 3.38428,1.07751 L3.38428,3.38425 L1.07764,3.38425 C0.482422,3.38425 0,3.86667 0,4.46179 C0,5.05688 0.482422,5.53931 1.07764,5.53931 L3.38428,5.53931 L3.38428,8.46063 L1.07764,8.46063 C0.482422,8.46063 0,8.94308 0,9.53818 C0,10.1333 0.482422,10.6157 1.07764,10.6157 L3.38428,10.6157 L3.38428,12.9224 C3.38428,13.5175 3.8667,13.9999 4.46191,13.9999 C5.05664,13.9999 5.53906,13.5175 5.53906,12.9224 L5.53906,10.6157 L8.46045,10.6157 L8.46045,12.9224 C8.46045,13.5175 8.94287,13.9999 9.53809,13.9999 C10.1333,13.9999 10.6157,13.5175 10.6157,12.9224 L10.6157,10.6157 L12.9224,10.6157 C13.5176,10.6157 14,10.1333 14,9.53818 C14,8.94308 13.5176,8.46063 12.9224,8.46063 L10.6157,8.46063 L10.6157,5.53931 L12.9224,5.53931 C13.5176,5.53931 14,5.05688 14,4.46179 C14,3.86667 13.5176,3.38425 12.9224,3.38425 L10.6157,3.38425 L10.6157,1.07751 C10.6157,0.482422 10.1333,0 9.53809,0 C8.94287,0 8.46045,0.482422 8.46045,1.07751 L8.46045,3.38425 L5.53906,3.38425 L5.53906,1.07751 C5.53906,0.482422 5.05664,0 4.46191,0 Z M5.53906,8.46063 L5.53906,5.53931 L8.46045,5.53931 L8.46045,8.46063 L5.53906,8.46063 Z"></path></svg></span>val mIoU</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesNumber"><path d="M4.46191,0 C3.8667,0 3.38428,0.482422 3.38428,1.07751 L3.38428,3.38425 L1.07764,3.38425 C0.482422,3.38425 0,3.86667 0,4.46179 C0,5.05688 0.482422,5.53931 1.07764,5.53931 L3.38428,5.53931 L3.38428,8.46063 L1.07764,8.46063 C0.482422,8.46063 0,8.94308 0,9.53818 C0,10.1333 0.482422,10.6157 1.07764,10.6157 L3.38428,10.6157 L3.38428,12.9224 C3.38428,13.5175 3.8667,13.9999 4.46191,13.9999 C5.05664,13.9999 5.53906,13.5175 5.53906,12.9224 L5.53906,10.6157 L8.46045,10.6157 L8.46045,12.9224 C8.46045,13.5175 8.94287,13.9999 9.53809,13.9999 C10.1333,13.9999 10.6157,13.5175 10.6157,12.9224 L10.6157,10.6157 L12.9224,10.6157 C13.5176,10.6157 14,10.1333 14,9.53818 C14,8.94308 13.5176,8.46063 12.9224,8.46063 L10.6157,8.46063 L10.6157,5.53931 L12.9224,5.53931 C13.5176,5.53931 14,5.05688 14,4.46179 C14,3.86667 13.5176,3.38425 12.9224,3.38425 L10.6157,3.38425 L10.6157,1.07751 C10.6157,0.482422 10.1333,0 9.53809,0 C8.94287,0 8.46045,0.482422 8.46045,1.07751 L8.46045,3.38425 L5.53906,3.38425 L5.53906,1.07751 C5.53906,0.482422 5.05664,0 4.46191,0 Z M5.53906,8.46063 L5.53906,5.53931 L8.46045,5.53931 L8.46045,8.46063 L5.53906,8.46063 Z"></path></svg></span>PB mIoU</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M6.98643729,14.0000972 C5.19579566,14.0000972 3.40419152,13.3106896 2.04245843,11.9323606 C-0.681017475,9.21200555 -0.680780251,4.76029539 2.04293482,2.04012507 C4.76664406,-0.68004331 9.22427509,-0.68004331 11.9480135,2.04013479 C13.272481,3.36277455 14,5.1330091 14,6.99552762 C14,8.87640182 13.2721894,10.6285043 11.9480135,11.9509302 C10.5679344,13.3105924 8.77756503,14.0000972 6.98643729,14.0000972 Z M10.2705296,7.00913883 L10.2705296,8.46099754 L10.2705296,8.65543362 L10.076181,8.65543362 L8.6543739,8.65543362 L5.72059514,8.65543362 L5.52619796,8.65543362 L5.52619796,8.46099754 L5.52619796,5.52541044 L5.52619796,3.37946773 L5.52619796,3.18502193 L5.72059514,3.18502193 L7.17253164,3.18502193 L7.36692883,3.18502193 L7.36692883,3.37946773 L7.36692883,6.81467358 L10.076181,6.81467358 L10.2705296,6.81467358 L10.2705296,7.00913883 Z M12.1601539,6.99552762 C12.1601539,5.61697497 11.6190112,4.32597154 10.6393933,3.34769528 C8.63253764,1.34336744 5.35197452,1.34061603 3.34153136,3.33944106 C3.33868273,3.34219247 3.33607716,3.34494388 3.33322852,3.34769528 C1.32397148,5.35459953 1.32372842,8.63641682 3.33322852,10.6433794 C5.34295224,12.6504489 8.62968901,12.6504489 10.6393933,10.6433794 C11.6190112,9.66506426 12.1601539,8.37408027 12.1601539,6.99552762 Z"></path></svg></span>Last edited time</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.4);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>memo</th></tr></thead><tbody><tr id="c558a3ef-b224-429e-89f6-9dc19ce577e2"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/c558a3efb224429e89f69dc19ce577e2">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-green">SegNet</span><span class="selected-value select-value-color-gray">vgg16</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">1</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정 필요</td><td class="cell-m[zc"></td><td class="cell-Bere">0.1611</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="ebd0000d-279e-4e1a-a3fa-875f0ca8dca2"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/ebd0000d279e4e1aa3fa875f0ca8dca2">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-green">SegNet</span><span class="selected-value select-value-color-gray">vgg16</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">1</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc"></td><td class="cell-Bere">0.1672</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="bb848beb-bafe-40f5-a9d4-c7f68fa41623"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/SegNet-vgg16-bb848bebbafe40f5a9d4c7f68fa41623">SegNet + vgg16</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-green">SegNet</span><span class="selected-value select-value-color-gray">vgg16</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">11</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc"></td><td class="cell-Bere"></td><td class="cell-]^=B">0.4093</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="b5c36795-a3c4-475c-9bfe-d3b343d5f6d2"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/SegNet-vgg16-normalize-b5c36795a3c4475c9bfed3b343d5f6d2">SegNet + vgg16 + normalize</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-green">SegNet</span><span class="selected-value select-value-color-gray">vgg16</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">11</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc"></td><td class="cell-Bere"></td><td class="cell-]^=B">0.4126</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="837b4726-65d7-4853-9981-829aff7b1905"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/837b472665d748539981829aff7b1905">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-default">efficientnet-b0</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">1</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc"></td><td class="cell-Bere">0.1729</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="f151de16-7a19-44a8-878a-708bd7c93aca"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/f151de167a1944a8878a708bd7c93aca">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-default">efficientnet-b0</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">19</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc"></td><td class="cell-Bere">0.3947</td><td class="cell-]^=B">0.4311</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="fa1e60e5-7bb7-474d-ab2c-7e5a5fbc83ec"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/fa1e60e57bb7474dab2c7e5a5fbc83ec">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">1</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.5955</td><td class="cell-Bere">0.2367</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="08bdd770-7021-4070-9577-731c73a82320"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/08bdd770702140709577731c73a82320">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">7</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.3621</td><td class="cell-Bere">0.3418</td><td class="cell-]^=B">0.4574</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">model save를 val loss가 제일 낮을 때로 해서 7에서 멈췄지만 val mIoU는 계속 올라가서 epoch 20에 val mIoU 0.4059가 나옴. epoch 20 넘어서도 더 올라갈것 같다.</td></tr><tr id="15f2a501-2827-499e-8449-eda32f3cac0a"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/15f2a5012827499e8449eda32f3cac0a">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">11</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.3615</td><td class="cell-Bere">0.3818</td><td class="cell-]^=B">0.4443</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">승현</td></tr><tr id="3f9546bc-8d37-4837-be66-e5aba8ff10a6"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/3f9546bc8d374837be66e5aba8ff10a6">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">16</td><td class="cell-ZiTF"><span class="selected-value select-value-color-orange">batch_size 32</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.3842</td><td class="cell-Bere">0.3587</td><td class="cell-]^=B">0.4176</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">승현 - batch size 커질수록 성능 하락하는 듯??</td></tr><tr id="1244bed5-161e-47e7-9aad-d84442022497"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/1244bed5161e47e79aadd84442022497">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">7</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3566</td><td class="cell-Bere">0.3387</td><td class="cell-]^=B">0.4647</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">pb miou 업데이트 예정</td></tr><tr id="9d0f25d4-c41e-4468-bf07-d88622ce7f18"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/9d0f25d4c41e4468bf07d88622ce7f18">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">9</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3458</td><td class="cell-Bere">0.3792</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">pb miou 업데이트 예정</td></tr><tr id="d9ba7a94-186e-4404-a970-7eb322364bc1"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/d9ba7a94186e4404a9707eb322364bc1">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">19</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3773</td><td class="cell-Bere">0.41</td><td class="cell-]^=B">0.4462</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">pb miou 업데이트 예정</td></tr><tr id="9e17c906-dbf5-4ad3-8778-9b20da2369ba"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/9e17c906dbf54ad387789b20da2369ba">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-default">Resize 256x256</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">44</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.499</td><td class="cell-Bere">0.4351</td><td class="cell-]^=B">0.3244</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="18c86c45-362d-41e8-b5b7-f7bb2ca873b7"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/18c86c45362d41e8b5b7f7bb2ca873b7">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-blue">Unet++</span><span class="selected-value select-value-color-blue">se-Resnext101</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">10</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2922</td><td class="cell-Bere">0.3973</td><td class="cell-]^=B">0.4921</td><td class="cell-?SZn"><time>@May 2, 2021 11:21 PM</time></td><td class="cell-jnuQ">승현</td></tr><tr id="6b70d67f-747e-4e50-b5b9-25ccb7e8b321"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/6b70d67f747e4e50b5b925ccb7e8b321">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">6</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">avrg_loss 기준으로 best model 저장</td><td class="cell-m[zc">0.3153</td><td class="cell-Bere">0.4428</td><td class="cell-]^=B">0.5315</td><td class="cell-?SZn"><time>@May 3, 2021 10:46 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="2f296e13-12a7-45bc-800d-a13c605c5fa9"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/2f296e1312a745bc800da13c605c5fa9">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">17</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val_miou 기준으로 best model 저장</td><td class="cell-m[zc">0.3227</td><td class="cell-Bere">0.5017</td><td class="cell-]^=B">0.5481</td><td class="cell-?SZn"><time>@May 3, 2021 11:54 AM</time></td><td class="cell-jnuQ">mIoU 기준으로 best model 저장하는게 더 좋다</td></tr><tr id="1e387886-93ff-4fb7-965a-0aa7775b3437"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/1e38788693ff4fb7965a0aa7775b3437">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-yellow">Transpose</span><span class="selected-value select-value-color-orange">VerticalFlip</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">9</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">A.CLAHE((0,5), p=1.0),
+A.VerticalFlip(p=0.5),
+A.HorizontalFlip(p=0.5),
+A.Transpose(p=0.5),</td><td class="cell-m[zc">0.3229</td><td class="cell-Bere">0.4081</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 3, 2021 9:36 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="27bbd935-1bb2-49e5-8a38-a4d06df8a03b"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/27bbd9351bb249e58a38a4d06df8a03b">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-yellow">Transpose</span><span class="selected-value select-value-color-orange">VerticalFlip</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">19</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">A.CLAHE((0,5), p=1.0),
+A.VerticalFlip(p=0.5),
+A.HorizontalFlip(p=0.5),
+A.Transpose(p=0.5),</td><td class="cell-m[zc">0.2989</td><td class="cell-Bere">0.4928</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 3, 2021 9:36 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="0b045819-bae2-465f-832f-0736cea0c396"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/0b045819bae2465f832f0736cea0c396">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-yellow">Transpose</span><span class="selected-value select-value-color-orange">VerticalFlip</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">57</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">A.CLAHE((0,5), p=1.0),
+A.VerticalFlip(p=0.5),
+A.HorizontalFlip(p=0.5),
+A.Transpose(p=0.5),</td><td class="cell-m[zc">0.3184</td><td class="cell-Bere">0.5294</td><td class="cell-]^=B">0.5576</td><td class="cell-?SZn"><time>@May 3, 2021 9:36 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="32794d21-324c-4f6a-bdcd-81f40bf32e81"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/32794d21324c4f6abdcd81f40bf32e81">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-purple">ResNet152</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">10</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.2874</td><td class="cell-Bere">0.4473</td><td class="cell-]^=B">0.5707</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">- 승현</td></tr><tr id="25ee102a-5df9-48b7-bf88-b5243fe5c7dd"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/25ee102a5df948b7bf88b5243fe5c7dd">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-blue">se-Resnext101</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">6</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">val mIoU 코드 수정필요</td><td class="cell-m[zc">0.2612</td><td class="cell-Bere">0.4759</td><td class="cell-]^=B">0.5919</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">승현 - val mIoU 기준 best model도 만들어보기</td></tr><tr id="f6000f64-dded-4ede-af9b-05a02bf84625"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/f6000f64dded4edeaf9b05a02bf84625">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-blue">se-resnext50</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">11</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">동일 환경에서 과적합하는 것이 성능이 더 좋아 보임.(public기준)</td><td class="cell-m[zc">0.2918</td><td class="cell-Bere">0.5653</td><td class="cell-]^=B">0.5742</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">수호</td></tr><tr id="fd9ed0cd-2f4e-419b-a37f-df3b9a250ba8"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/fd9ed0cd2f4e419ba37fdf3b9a250ba8">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-blue">se-resnext50</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">28</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3416</td><td class="cell-Bere">0.5784</td><td class="cell-]^=B">0.5839</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">수호</td></tr><tr id="efda8d68-c909-486f-ab62-a73eee156839"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/efda8d68c909486fab62a73eee156839">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-brown">DeepLab V3</span><span class="selected-value select-value-color-brown">resnet101</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">13</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3098</td><td class="cell-Bere">0.519</td><td class="cell-]^=B">0.5483</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">수호</td></tr><tr id="d60ac707-23cb-41d3-b634-22a3e4c4cc8d"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/d60ac70723cb41d3b63422a3e4c4cc8d">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-blue">se-Resnext101</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u"></td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-pink">lr 1e-3</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">승현님이 올려주신 올리신 부분이랑 lr과 schedular만 다른것 같은데 차이가 많이나서 원인을 찾아야 할듯</td><td class="cell-m[zc">0.4159</td><td class="cell-Bere">0.3322</td><td class="cell-]^=B">0.4005</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">영민</td></tr><tr id="7acca587-7f59-4c2a-ae75-ae144ae9b75b"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/7acca5877f594c2aae75ae144ae9b75b">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-brown">DeepLab V3</span><span class="selected-value select-value-color-brown">resnet101</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u"></td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3268</td><td class="cell-Bere">0.5006</td><td class="cell-]^=B">0.539</td><td class="cell-?SZn"><time>@May 2, 2021 11:22 PM</time></td><td class="cell-jnuQ">영민</td></tr><tr id="faaad3a8-8492-4f67-a2d6-ba86459020ea"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/faaad3a884924f67a2d6ba86459020ea">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">6</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2731</td><td class="cell-Bere">0.5339</td><td class="cell-]^=B">0.5879</td><td class="cell-?SZn"><time>@May 3, 2021 10:43 AM</time></td><td class="cell-jnuQ">내꺼도 승현님꺼랑 차이가 남.</td></tr><tr id="96207e9b-a846-4ad5-8a62-bcc3bb0b58f4"><td class="cell-~mA]"><span class="selected-value select-value-color-default">채원</span></td><td class="cell-title"><a href="https://www.notion.so/96207e9ba8464ad58a62bcc3bb0b58f4">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-brown">DeepLab V3</span><span class="selected-value select-value-color-default">efficientnet-b0</span></td><td class="cell-nwjO"></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u">15</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">속도가 매우 느림</td><td class="cell-m[zc">0.2945</td><td class="cell-Bere">0.4762</td><td class="cell-]^=B">0.5599</td><td class="cell-?SZn"><time>@May 3, 2021 12:48 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="6dadcc14-fab0-409e-831c-f009f5a8592e"><td class="cell-~mA]"><span class="selected-value select-value-color-default">채원</span></td><td class="cell-title"><a href="https://www.notion.so/6dadcc14fab0409e831cf009f5a8592e">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-green">resnet34</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-green">InvertImg</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u">7</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">normal만 적용한 것보다 성능 저조해서 제출X</td><td class="cell-m[zc">0.4171</td><td class="cell-Bere">0.3413</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 3, 2021 12:48 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="244722d0-43d4-448e-b2c2-d08722b841b6"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/244722d043d4448eb2c2d08722b841b6">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">9</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">CLAHE(p=0.5)</td><td class="cell-m[zc">0.2726</td><td class="cell-Bere">0.5882</td><td class="cell-]^=B">0.5996</td><td class="cell-?SZn"><time>@May 3, 2021 12:00 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="d04cdbad-6fe0-4317-8653-c3c4a9f0e1fa"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/d04cdbad6fe043178653c3c4a9f0e1fa">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">21</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">CLAHE(p=0.5)</td><td class="cell-m[zc">0.3266</td><td class="cell-Bere">0.5894</td><td class="cell-]^=B">0.5936</td><td class="cell-?SZn"><time>@May 3, 2021 12:00 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="93813fcc-141c-4056-ab79-1700056a1415"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/93813fcc141c4056ab791700056a1415">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">22</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@[">CLAHE(p=0.5)
+HorizontalFlip(p=0.5)</td><td class="cell-m[zc">0.2968</td><td class="cell-Bere">0.6</td><td class="cell-]^=B">0.6029</td><td class="cell-?SZn"><time>@May 3, 2021 9:28 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="354e9509-e234-4a59-b602-c19ce8123b88"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/354e9509e2344a59b602c19ce8123b88">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u">40</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-default">lr 0.00005</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.327</td><td class="cell-Bere">0.5834</td><td class="cell-]^=B">0.5766</td><td class="cell-?SZn"><time>@May 3, 2021 4:27 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="c1fec51c-9ace-442f-a74a-dd4886cba553"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/c1fec51c9ace442fa74add4886cba553">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">2</td><td class="cell-ZiTF"><span class="selected-value select-value-color-yellow">batch_size 4</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">사전 epoch 6으로 학습한 거에 test data epoch 2를 추가학습
+MultiLabelSoftMarginLoss</td><td class="cell-m[zc"></td><td class="cell-Bere"></td><td class="cell-]^=B">0.5804</td><td class="cell-?SZn"><time>@May 3, 2021 8:45 PM</time></td><td class="cell-jnuQ">내려감..
+혹시 이전 mIoU는 몇이였나요?
+이전꺼 PB mIoU 0.5879 이었습니다.</td></tr><tr id="b5bbc95a-f048-40de-8374-beb2a9451390"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/b5bbc95af04840de8374beb2a9451390">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-gray">cv2.Canny</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">7</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">cv2.Canny(image_canny, 50, 200)
+output = (0.4 * images_canny) + (0.6 * image)</td><td class="cell-m[zc">0.4084</td><td class="cell-Bere">0.3194</td><td class="cell-]^=B">0.4219</td><td class="cell-?SZn"><time>@May 3, 2021 9:52 PM</time></td><td class="cell-jnuQ">cv2.Canny 안한 0.4647 보다 많이 떨어짐.</td></tr><tr id="f85cb525-a48b-45c0-ad12-92a1862f21b3"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/f85cb525a48b45c0ad1292a1862f21b3">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-pink">Unet</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-gray">cv2.Canny</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">7</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">cv2.Canny(image_canny, 100, 200)
+output = (0.1 * images_canny) + (0.9 * image)</td><td class="cell-m[zc">0.3845</td><td class="cell-Bere">0.3238</td><td class="cell-]^=B">0.4392</td><td class="cell-?SZn"><time>@May 3, 2021 10:13 PM</time></td><td class="cell-jnuQ">cv2.Canny 안한 0.4647 보다 많이 떨어짐.</td></tr><tr id="24035d6d-5585-42a0-b03b-1ddc15ab61f1"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/24035d6d558542a0b03b1ddc15ab61f1">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">54</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-brown">seed 42</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2908</td><td class="cell-Bere">0.5341</td><td class="cell-]^=B">0.5824</td><td class="cell-?SZn"><time>@May 3, 2021 10:51 PM</time></td><td class="cell-jnuQ">기존의 CLAHE, Horizontal 보다 0.04정도 상승</td></tr><tr id="c670017d-8b55-461f-bbfc-1be3af602983"><td class="cell-~mA]"><span class="selected-value select-value-color-red">승현</span></td><td class="cell-title"><a href="https://www.notion.so/c670017d8b55461fbbfc1be3af602983">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-blue">se-Resnext101</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-yellow">Transpose</span><span class="selected-value select-value-color-orange">VerticalFlip</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">12</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">cv2.Canny(image_canny, 100, 200)
+output = (0.1 * images_canny) + (0.9 * image)</td><td class="cell-m[zc">0.2726</td><td class="cell-Bere">0.5755</td><td class="cell-]^=B">0.6024</td><td class="cell-?SZn"><time>@May 4, 2021 1:52 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="d4b6309a-461a-40a3-8d1f-7eca7a6c6b03"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/d4b6309a461a40a38d1f7eca7a6c6b03">학습 로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-gray">timm-regnety_120</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">20</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3169</td><td class="cell-Bere">0.5888</td><td class="cell-]^=B">0.6118</td><td class="cell-?SZn"><time>@May 4, 2021 10:42 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="2b788111-1359-4675-9925-2890ba09b642"><td class="cell-~mA]"><span class="selected-value select-value-color-default">채원</span></td><td class="cell-title"><a href="https://www.notion.so/2b7881111359467599252890ba09b642">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">40</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">best epoch : 23</td><td class="cell-m[zc">0.2303</td><td class="cell-Bere">0.5573</td><td class="cell-]^=B">0.6361</td><td class="cell-?SZn"><time>@May 4, 2021 8:28 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="4fdc42c7-8331-4813-a9d4-6b348937f2e0"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/4fdc42c783314813a9d46b348937f2e0">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-orange">senet154</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">40</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">best epoch : 36</td><td class="cell-m[zc">0.2214</td><td class="cell-Bere">0.5491</td><td class="cell-]^=B">0.6297</td><td class="cell-?SZn"><time>@May 4, 2021 1:56 PM</time></td><td class="cell-jnuQ">학습에 총 9시간 소요</td></tr><tr id="9f45e3a7-004b-4222-86bd-e408fd060d33"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/9f45e3a7004b422286bde408fd060d33">학습</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-blue">Unet++</span><span class="selected-value select-value-color-red">inceptionv4</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-default">Resize 256x256</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">35</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">encoder_weights=&#x27;imagenet+background&#x27;</td><td class="cell-m[zc">0.2965</td><td class="cell-Bere">0.4944</td><td class="cell-]^=B">0.5356</td><td class="cell-?SZn"><time>@May 4, 2021 6:15 PM</time></td><td class="cell-jnuQ">학습에 background 있어서 써봤지만
+그냥 deeplabv3 쓰자.</td></tr><tr id="c2761498-4591-4e26-b092-57fe17e29742"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/c276149845914e26b09257fe17e29742">학습</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">18</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">정환님 scheduler</td><td class="cell-m[zc">0.2987</td><td class="cell-Bere">0.4562</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 4, 2021 6:59 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="d0fccc72-9aec-4bdd-a39d-3ff4386d96e9"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/d0fccc729aec4bdda39d3ff4386d96e9">학습</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">29</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">scheduler 제거</td><td class="cell-m[zc">0.294</td><td class="cell-Bere">0.5145</td><td class="cell-]^=B">0.568</td><td class="cell-?SZn"><time>@May 4, 2021 7:57 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="cfb40764-1e3f-4080-ab58-df0f9caabaa3"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/cfb407641e3f4080ab58df0f9caabaa3">위의 꺼 이어서 학습</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">41</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">scheduler 제거</td><td class="cell-m[zc">0.2871</td><td class="cell-Bere">0.5323</td><td class="cell-]^=B">0.568</td><td class="cell-?SZn"><time>@May 4, 2021 8:50 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="d968fe62-acaa-402b-939d-d6522b28fe7c"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/d968fe62acaa402b939dd6522b28fe7c">학습</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">27</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">crop img 3개 실패인듯..</td><td class="cell-m[zc">0.3025</td><td class="cell-Bere">0.5008</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 4, 2021 10:05 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="1c505ff7-2d95-43f2-9ef1-d5424776938b"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/2-1c505ff72d9543f29ef1d5424776938b">2차 테스트</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-gray">efficientnet-b4</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">25</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">scheduler 제거</td><td class="cell-m[zc">0.24</td><td class="cell-Bere">0.5789</td><td class="cell-]^=B">0.6087</td><td class="cell-?SZn"><time>@May 5, 2021 12:10 PM</time></td><td class="cell-jnuQ">7시간뒤에 돌아올게요..ㅠㅠ</td></tr><tr id="97a7d005-8225-4eaa-9d1e-ce06a4a46e73"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/1-97a7d00582254eaa9d1ece06a4a46e73">1차 테스트</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-gray">efficientnet-b4</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">22</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">scheduler 제거</td><td class="cell-m[zc">0.2436</td><td class="cell-Bere">0.5735</td><td class="cell-]^=B">0.6039</td><td class="cell-?SZn"><time>@May 5, 2021 7:55 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="b23063ac-fa9c-463f-bba4-96e040519343"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/b23063acfa9c463fbba496e040519343">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">HueSaturationValue</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">34</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.312</td><td class="cell-Bere">0.5073</td><td class="cell-]^=B">0.568</td><td class="cell-?SZn"><time>@May 5, 2021 12:58 AM</time></td><td class="cell-jnuQ">얘의 epoch 39는 Average Loss: 0.2976, mIoU: 0.5002 이 나옴(바로 밑에 거랑 비교)</td></tr><tr id="5ad8ed56-9653-4ead-8b12-08e231915556"><td class="cell-~mA]"><span class="selected-value select-value-color-default">채원</span></td><td class="cell-title"><a href="https://www.notion.so/5ad8ed5696534ead8b1208e231915556">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">HueSaturationValue</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">40</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2885</td><td class="cell-Bere">0.5982</td><td class="cell-]^=B">0.5976</td><td class="cell-?SZn"><time>@May 5, 2021 11:44 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="9b2a31ec-98b0-4159-a0d2-365f799bef5b"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/9b2a31ec98b04159a0d2365f799bef5b">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">39</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3042</td><td class="cell-Bere">0.5101</td><td class="cell-]^=B">0.5637</td><td class="cell-?SZn"><time>@May 5, 2021 12:57 AM</time></td><td class="cell-jnuQ">얘의 epoch 34는 Average Loss: 0.3088, mIoU: 0.5066 이 나옴(바로 위에 거랑 비교)</td></tr><tr id="0112cb0f-c779-4a83-b742-a55479230231"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/0112cb0fc7794a83b742a55479230231">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-red">adamp</span></td><td class="cell-^V&lt;u">36</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2889</td><td class="cell-Bere">0.4918</td><td class="cell-]^=B">0.5532</td><td class="cell-?SZn"><time>@May 5, 2021 2:45 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="50fa608c-5bee-4bb7-9b29-95f57d06f0a2"><td class="cell-~mA]"><span class="selected-value select-value-color-blue">영민</span></td><td class="cell-title"><a href="https://www.notion.so/50fa608c5bee4bb79b2995f57d06f0a2">Untitled</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u"></td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2998</td><td class="cell-Bere">0.4637</td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 5, 2021 3:18 AM</time></td><td class="cell-jnuQ">제출은 하지 않았음,, </td></tr><tr id="5e2bb797-6396-419e-a1a8-661c81aaa083"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/5e2bb7976396419ea1a8661c81aaa083">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-gray">timm-regnety_120</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">45</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">epoch 20까지 했던걸 이어서 학습(optimizer 초기화됨)</td><td class="cell-m[zc">0.2511</td><td class="cell-Bere">0.5943</td><td class="cell-]^=B">0.598</td><td class="cell-?SZn"><time>@May 5, 2021 12:37 AM</time></td><td class="cell-jnuQ">원래 epoch 20 했을 때보다 PB 0.013 내려감.</td></tr><tr id="c5051d00-8abc-4867-ae56-db12779b9578"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/c5051d008abc4867ae56db12779b9578">학습 로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span><span class="selected-value select-value-color-yellow">Rotate</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">39</td><td class="cell-ZiTF"><span class="selected-value select-value-color-green">batch_size 8</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">A.Rotate(limit=30)</td><td class="cell-m[zc">0.2953</td><td class="cell-Bere">0.5127</td><td class="cell-]^=B">0.5651</td><td class="cell-?SZn"><time>@May 5, 2021 10:38 AM</time></td><td class="cell-jnuQ">default PB 0.5637 에서 PB 0.5651로 상승.</td></tr><tr id="a113849b-f9bf-4a02-8fe5-8d4675fc1004"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/a113849bf9bf4a028fe58d4675fc1004">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-green">CropNonEmptyMaskIfExists(400)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">27</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">Crop 256 → 400</td><td class="cell-m[zc">0.3128</td><td class="cell-Bere">0.516</td><td class="cell-]^=B">0.5636</td><td class="cell-?SZn"><time>@May 5, 2021 11:57 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="38373703-7b5e-46a4-956c-9791ab5d9b27"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/30-383737037b5e46a4956c9791ab5d9b27">학습로그(위에서 30에폭 더 증가)</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-green">CropNonEmptyMaskIfExists(400)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">36</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">Crop 256 → 400</td><td class="cell-m[zc">0.3029</td><td class="cell-Bere">0.5339</td><td class="cell-]^=B">0.564</td><td class="cell-?SZn"><time>@May 6, 2021 6:28 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="7b790b4e-2cb2-460d-b484-7c4fb83781bf"><td class="cell-~mA]"><span class="selected-value select-value-color-yellow">상건</span></td><td class="cell-title"><a href="https://www.notion.so/7b790b4e2cb2460db4847c4fb83781bf">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-default">Resize 256x256</span><span class="selected-value select-value-color-yellow">Rotate</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">31</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.2363</td><td class="cell-Bere">0.6154</td><td class="cell-]^=B">0.6309</td><td class="cell-?SZn"><time>@May 6, 2021 1:33 AM</time></td><td class="cell-jnuQ"></td></tr><tr id="9f2549c3-bbb0-4a71-95a9-fb68da197138"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/9f2549c3bbb04a7195a9fb68da197138">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-red">CropNonEmptyMaskIfExists(256)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span><span class="selected-value select-value-color-yellow">Rotate</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">30</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-yellow">lr 0.0001 (scheduler)</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc"></td><td class="cell-Bere"></td><td class="cell-]^=B"></td><td class="cell-?SZn"><time>@May 5, 2021 1:54 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="7784df79-7930-4fbb-87fd-d06b1bf9b982"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/7784df7979304fbb87fdd06b1bf9b982">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-default">se-resnext101_32x4d</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-green">CropNonEmptyMaskIfExists(400)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span><span class="selected-value select-value-color-yellow">Rotate</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">14</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-yellow">lr 0.0001 (scheduler)</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@[">kfold 0</td><td class="cell-m[zc">0.2336</td><td class="cell-Bere">0.6089</td><td class="cell-]^=B">0.6261</td><td class="cell-?SZn"><time>@May 5, 2021 11:28 PM</time></td><td class="cell-jnuQ"></td></tr><tr id="834cd909-da03-402c-ba0c-ad4fae0e5d53"><td class="cell-~mA]"><span class="selected-value select-value-color-pink">수호</span></td><td class="cell-title"><a href="https://www.notion.so/834cd909da03402cba0cad4fae0e5d53">학습로그</a></td><td class="cell-;{D}"><span class="selected-value select-value-color-red">DeepLab V3+</span><span class="selected-value select-value-color-yellow">mobilenet v2</span></td><td class="cell-nwjO"><span class="selected-value select-value-color-blue">CLAHE</span><span class="selected-value select-value-color-green">CropNonEmptyMaskIfExists(400)</span><span class="selected-value select-value-color-purple">HorizontalFilp</span><span class="selected-value select-value-color-brown">Normalize</span><span class="selected-value select-value-color-pink">Resize 512X512</span><span class="selected-value select-value-color-yellow">Rotate</span></td><td class="cell-X\AY"><span class="selected-value select-value-color-green">adam</span></td><td class="cell-^V&lt;u">33</td><td class="cell-ZiTF"><span class="selected-value select-value-color-red">batch_size 16</span><span class="selected-value select-value-color-blue">lr 0.0001</span><span class="selected-value select-value-color-purple">seed 21</span></td><td class="cell-}f@["></td><td class="cell-m[zc">0.3028</td><td class="cell-Bere">0.5169</td><td class="cell-]^=B">0.5728</td><td class="cell-?SZn"><time>@May 6, 2021 6:28 AM</time></td><td class="cell-jnuQ">Rotate 검증</td></tr></tbody></table></div><figure id="dee47c81-9ddd-4214-a7c5-38a734d70431"><a href="https://github.com/bcaitech1/p3-ims-obd-doggum" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title"></div></div><div class="bookmark-href">https://github.com/bcaitech1/p3-ims-obd-doggum</div></div></a></figure><p id="be7a3899-b9ab-4409-804f-b295ad2e8ffb" class="">
+</p><p id="d0091c79-dbb8-4755-adbd-6ae74fdeb6bb" class="">models library</p><figure id="61679357-a711-4b6a-800c-22eb88bdc1dc"><a href="https://github.com/qubvel/segmentation_models.pytorch" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">qubvel/segmentation_models.pytorch</div><div class="bookmark-description">The main features of this library are: High level API (just two lines to create a neural network) 9 models architectures for binary and multi class segmentation (including legendary Unet) 104 available encoders All encoders have pre-trained weights for faster and better convergence Visit Read The Docs Project Page or read following README to know more about Segmentation Models Pytorch (SMP for short) library 1.</div></div><div class="bookmark-href"><img src="https://github.com/favicon.ico" class="icon bookmark-icon"/>https://github.com/qubvel/segmentation_models.pytorch</div></div><img src="https://opengraph.githubassets.com/a8f924eafd6f78c527aabfd851aaf63b364e73cb27c1e69ee6060c70c3e260ab/qubvel/segmentation_models.pytorch" class="bookmark-image"/></a></figure><p id="fc8a4dd0-7491-496c-b2e4-a6e032fb020e" class="">Augmentation</p><figure id="4cd29937-b239-4308-a33e-ea5d9be131de"><a href="https://albumentations-demo.herokuapp.com/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Streamlit</div></div><div class="bookmark-href"><img src="https://albumentations-demo.herokuapp.com/favicon.png" class="icon bookmark-icon"/>https://albumentations-demo.herokuapp.com/</div></div></a></figure><p id="65c361e2-6e02-4ee3-a1e2-efe5a01b8097" class="">논문</p><figure id="aa5443c4-2c63-452b-9bbb-800d8d53f4fc"><a href="https://paperswithcode.com/task/semantic-segmentation" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Papers with Code - Semantic Segmentation</div><div class="bookmark-description">Semantic segmentation, or image segmentation, is the task of clustering parts of an image together which belong to the same object class. It is a form of pixel-level prediction because each pixel in an image is classified according to a category. Some example benchmarks for this task are Cityscapes, PASCAL VOC and ADE20K.</div></div><div class="bookmark-href"><img src="https://paperswithcode.com/favicon.ico" class="icon bookmark-icon"/>https://paperswithcode.com/task/semantic-segmentation</div></div><img src="https://paperswithcode.com/media/thumbnails/task/task-0000000885-bec5f079.jpg" class="bookmark-image"/></a></figure><p id="94a4f58f-33f4-4c2e-99e3-d53c7fd2c558" class="">
+</p><p id="a84808e1-84ab-4001-8fa3-4210fe2a487f" class="">백그라운드 실행</p><figure id="5a691bfe-5653-400d-b502-8c85032f4350"><a href="https://blkcoding.blogspot.com/2018/03/nohup.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">리눅스 백그라운드 파이썬 실행 nohup 사용법</div><div class="bookmark-description">파이썬 프로그램을 백그라운드로 돌리는 방법은 다음과 같다. 그러나 이 방법은 현재 창을 종료하면 terminate된다는 단점이 있다. 이를 위해 nohup 키워드를 사용할 수 있다. 해당 명령어를 입력하면 로그 파일로 nohup.out이라는 파일에 쌓이게 된다. 문제는 print 문으로 찍었던 내용이 바로 nohup.out에 쌓이는게 아니다. 명령어를 친다고 하더라도 바로 print문으로 했던 것이 화면에 나오는 것이 아니라는 것이다.</div></div><div class="bookmark-href"><img src="https://blkcoding.blogspot.com/favicon.ico" class="icon bookmark-icon"/>https://blkcoding.blogspot.com/2018/03/nohup.html</div></div><img src="https://1.bp.blogspot.com/-KqGkRlkWgoU/Wl-JUYFcYfI/AAAAAAAAAMw/DEfQYLYQPpoGsBjQMx_HLztIwTvsG5kIACLcBGAs/s640/1.jpg" class="bookmark-image"/></a></figure><figure id="63fd6822-5f10-4bc1-8380-6249b6fc9d11"><a href="https://edykim.com/ko/post/tmux-introductory-series-summary/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">tmux 입문자 시리즈 요약</div><div class="bookmark-description">tmux를 어디선가 보고 엄청 멋지다 싶어서 검색했더니 @nanhapark 님이 재미있게 정리한 글이 있어서 편하게 볼 수 있었다. 읽은 글들은 다음 목록에서 확인할 수 있고, 읽으며 요약해 정리했다. (nodeqa.com에 해당 글이 있었는데 사이트가 더이상 운영되지 않아 링크를 제거했다.) 맥에서는 brew로 설치 가능 session : tmux 실행 단위. 여러개의 window로 구성.</div></div><div class="bookmark-href"><img src="https://edykim.com/ko/favicon-32x32.png?v=f54a3a4c25ae7be601b8b389a18b99b6" class="icon bookmark-icon"/>https://edykim.com/ko/post/tmux-introductory-series-summary/</div></div></a></figure><p id="445621b5-4668-47fa-b6fc-33ffc5fc80bc" class="">
+</p></div></article></body></html>
