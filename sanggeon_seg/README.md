@@ -182,6 +182,9 @@ Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagen
     * 설명 : 나중에 진행한 object obd 프로젝트에서 object 만 따로 분리한 coco dataset을 만드는 코드.
     
 
+## 실험 기록들
+[🧪 P-stage3 seg 실험들 기록](https://htmlpreview.github.io/?https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_seg/test%20history.html)
+
 ## 렙업 레포트
 ![files/pstage3%20seg%20랩업_Page_1.png](files/pstage3%20seg%20랩업_Page_1.png)  
 ![files/pstage3%20seg%20랩업_Page_2.png](files/pstage3%20seg%20랩업_Page_2.png)  
