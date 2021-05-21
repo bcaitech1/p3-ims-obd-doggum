@@ -96,13 +96,18 @@ Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagen
 
     * 설명 : baseline을 notebook 기반으로 작성하였으며, 순차적으로 실행하시면 `submission.csv` 을 생성할 수 있습니다.
 
-* code/utils.py
+* `code/utils.py`
 
     * 설명 : 평가지표인 mIoU를 계산하는 python script 입니다.
 
-* code/requirements.txt
+* `code/requirements.txt`
 
     * 설명 : baseline을 돌리기 위해 필요한 library 들이 기입되어 있습니다.
+
+
+* `datasets/data_loader.py`
+    * 설명 : coco dataset을 불러오는 코드.
+    
 
 ### How to use?
 
@@ -152,6 +157,30 @@ Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagen
     11. submission.csv 생성
 
 4. `code/submission/submission.csv` 제출
+
+## 내가 수정한 / 만든 코드
+
+* `loss/optimizer.py, utils.py`
+    * 설명 : optimizer랑 loss 함수를 custom하기 위해 만든 코드.
+    
+* `network/segnet.py, utils.py`
+    * 설명 : 다른 여러 모델을 불러오기 위한 코드.
+    
+* `transforms/Augmentations.py`
+    * 설명 : 여러 augmentation을 적용시키기 위해 만든 코드.
+    
+* `visualize/showplots.py`
+    * 설명 : EDA를 보기 위해 만든 코드.
+    
+* `config.py`
+    * 설명 : 훈련 config을 위한 코드.
+
+* `train_MPL` `train_MPL_custom`
+    * 설명 : [meta pseudo label](https://paperswithcode.com/paper/meta-pseudo-labels) 을 하기위한 시도. 잘 되진 않음.
+    
+* `make_coco_~~~.py, .ipynb`
+    * 설명 : 나중에 진행한 object obd 프로젝트에서 object 만 따로 분리한 coco dataset을 만드는 코드.
+    
 
 ## 렙업 레포트
 ![files/pstage3%20seg%20랩업_Page_1.png](files/pstage3%20seg%20랩업_Page_1.png)  
