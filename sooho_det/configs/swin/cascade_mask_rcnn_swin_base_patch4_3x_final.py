@@ -1,7 +1,7 @@
 _base_ = [
     '../../_base_/models/cascade_mask_rcnn_swin_fpn.py',
-    '../../_base_/datasets/dataset_swin_final.py',
-    '../../_base_/schedules/schedule_swin_final.py', '../../_base_/default_runtime_swin_base_final.py'
+    '../../_base_/datasets/dataset_swin_jh.py',
+    '../../_base_/schedules/schedule_swin.py', '../../_base_/default_runtime_swin_base.py'
 ]
 
 model = dict(
