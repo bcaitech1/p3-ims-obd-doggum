@@ -163,7 +163,7 @@ python pkl_to_submission.py --pkl work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch_1
       
     * `mmdetection_trash`로 들어가서 아래 명령어를 실행해 필요한 라이브러리를 설치해 줍니다.
     
-   
+
 ```
 conda install pytorch=1.6.0 cudatoolkit=10.1 torchvision -c pytorch
 
@@ -173,6 +173,30 @@ pip install -r requirements.txt
 
 pip install -v -e .
 ```
+
+## 추가한 / 수정한 코드
+
+* `configs/trash/ssd/`,
+  `configs/_base_/models/ssd300.py`
+    * 설명 : ssd300 모델 실행을 위해 만든 코드.
+    
+
+* `configs/trash/yolo/`
+    * 설명 : yolo 모델 실행을 위해 만든 코드.
+    
+
+* `configs/trash/swin/cascade_mask_rcnn_swin_~~~.py`, 
+  `configs/_base_/default_runtime_swin_base_final.py`,
+  `configs/_base_/datasets/dataset_swin_final.py`,
+  `configs/_base_/models/models/cascade_mask_rcnn_swin_fpn.py`
+    * 설명 : cascade_mask_rcnn_swin 을 실행하기 위해 만든 코드.
+    
+
+* `configs/swin/hybrid_cascade.py`,
+  `configs/trash/dataset_hybrid.py`
+    * 설명 : 논문을 비슷하게 재현하기 위해 만든 코드.
+    
+    
 
 ## 렙업 레포트
 ![files/pstage3%20obd%20랩업_Page_1.png](files/pstage3%20obd%20랩업_Page_1.png)  
