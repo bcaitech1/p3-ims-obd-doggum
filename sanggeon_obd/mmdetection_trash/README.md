@@ -197,6 +197,14 @@ pip install -v -e .
     * 설명 : 논문을 비슷하게 재현하기 위해 만든 코드.
     
     
+## 실험 결과들
+[Object Detection 실험관리(notion)](https://htmlpreview.github.io/?https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_obd/mmdetection_trash/test%20history.html)
+
+[나의 개인적인 테스트 결과들(wandb)](https://wandb.ai/sglee487/Pstage4_object_detection)  
+![img_7.png](files/img_7.png)  
+
+[앙상블을 위한 결과(wandb)](https://wandb.ai/sglee487/Project4_object_detection)  
+![img_8.png](files/img_8.png)
 
 ## 렙업 레포트
 ![files/pstage3%20obd%20랩업_Page_1.png](files/pstage3%20obd%20랩업_Page_1.png)  
