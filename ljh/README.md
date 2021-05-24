@@ -1,5 +1,15 @@
-# Timeline
+# 개요
 
+# 데이터
+
+- 전체 이미지 개수 : (512,512) 4109장
+
+- class(12) : Background, UNKNOWN, General trash, Paper, Paper pack, Metal, Glass, Plastic, Styrofoam, Plastic bag, Battery, Clothing
+
+![image](https://user-images.githubusercontent.com/43736669/119310188-5dda9380-bcaa-11eb-844d-36f2707331d3.png)
+
+
+# Timeline
 
 ## 3일차(4/29)
 
@@ -8,8 +18,12 @@
   - CONFIG 등 파라미터 수정 위해 구조 파악이 시급
 
 - object detection augmentation 방법 논문 대충 읽음 https://arxiv.org/abs/2102.00221 
+
   - 일반 image augmentatioon 보다 심화된 augmentation 가능(모델 구조 이용)
+
   ![image](https://user-images.githubusercontent.com/43736669/116516294-6ab4d300-a908-11eb-822c-39705ad3c0a6.png)
+  
+  
 
 ## 4일차(4/30 금)
 - HRNet 포기(Pretrain 사용하기 위해 써야 하는 모델이 너무 무거움)
