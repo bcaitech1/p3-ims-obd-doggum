@@ -21,7 +21,7 @@
 ## Data Augmentation
 - 성능 향상을 이끌었던 Augmentation 적용 후 학습(Rotate, CLAHE, HorizontalFlip, Crop 등)
 
-## 스케쥴링
+## Scheduling
 - valid mIoU 계산 후 최고점을 계산하지 못 했으면 best state로 다시 돌아가 lr을 낮춘 후 재학습
 - train loss와 valid loss의 동시 감소 유도
 
