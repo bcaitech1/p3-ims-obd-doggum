@@ -1,4 +1,5 @@
 # 개요
+- 재활용 쓰레기 사진으로 부터 각 픽셀의 쓰레기 class를 찾는 semantic segmentation model
 
 # 데이터
 
