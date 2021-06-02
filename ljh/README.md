@@ -25,5 +25,10 @@
 - valid mIoU 계산 후 최고점을 계산하지 못 했으면 best state로 다시 돌아가 lr을 낮춘 후 재학습
 - train loss와 valid loss의 동시 감소 유도
 
+### 실험 관리
+- wandb 및 notion 
+
 # 결과
 - 최종 LB mIoU : 0.6561, 60위
+
+
