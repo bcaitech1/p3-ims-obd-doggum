@@ -6,10 +6,16 @@
 * [Environment](#environment)
 * [Models](#models)
     * [Swin-Transformer](#swin-transformer)
-    * [Faster-RCNN](#faster-rcnn)
-    * [DetectoRS](#detectors)
-* [Post-processing](#post-processing)
+    * [Neck : FPN](#neck)
+    * [### Loss](#loss)
+* [Augmentation](#augmentation)
+    * [Train augmentation)(#train-augmentation)
+    * [Test augmentation](#test_augmentation)
+* [Ensemble](#ensemble)
     * [Non-maximum Suppression](#non-maximum-suppression)
+    * [Weighted Boxes Fusion](#weighted-boxes-fusion)
+    * [적용과정](#적용과정)
+* [출처](#출처)
 * [Reference](#reference)
 
 ## 프로젝트 기간
@@ -40,13 +46,10 @@
 - Bbox Loss = GloUloss
 
 
-### 출처
-- FPN : https://eehoeskrap.tistory.com/300 [Enough is not enough]
-- GIoULoss : https://www.tensorflow.org/addons/api_docs/python/tfa/losses/GIoULoss
 
 ## Augmentation
 
-### train augmentation
+### Train augmentation
 - RandomFlip
 - AutoArgment : Resize, RandomCrop
 - Normalize, Pad, DefaultFormatBundle, Collect
@@ -55,12 +58,24 @@
 - MultiScaleFlipAug
 - Transform - Resize, RandomFlip, Normalize, ImageToTensor, Collect
 
-## Post-processing
+## Ensemble
 
-### Non maximum Suppression
-![image](https://user-images.githubusercontent.com/67626878/123540929-6e37cf80-d77c-11eb-8383-57cdc7c28ab6.png)
-- NMS는 불 필요한 박스들을 IoU를 기준으로 합쳐주는 방법으로, 앙상블 이전에 최대한 후처리하고 앙상블을 진행했습니다.
+### Non maximum Suppression(NMS)
+- 동일한 Object에 여러개의 bbox가 있다면, 가장 스코어가 높은 박스만 남기고 나머지를 제거하는 것
 
+### Weighted Boxes Fusion(WBF)
+- 다양한 물체 감지(Object Detection) 모델의 예측을 앙상블하여 성능을 향상시키는 새로운 방법
+- 예측의 일부를 단순히 제거하는 NMS, Soft-NMS extension과 달리, WBF는 모든 예측된 사각형을 사용하므로, 결합된 사각형의 품질이 크게 향상시킴
+
+### 적용 과정
+- Cascade mask swin base 기반 모델 K-fold 결과 각각에 NMS(=0.4) 적용하여 중복되는 Bbox 수 줄임
+- HTC swin Transformer 모델과 NMS를 적용하여 나온 Cascade mask swin base 모델 결과에 각각 weight를 달리하여 WBF 앙상블 수행
+
+
+### 출처
+- FPN : https://eehoeskrap.tistory.com/300 [Enough is not enough]
+- GIoULoss : https://www.tensorflow.org/addons/api_docs/python/tfa/losses/GIoULoss
+- WBF : https://lv99.tistory.com/74
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
