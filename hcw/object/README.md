@@ -15,8 +15,11 @@
     * [Non-maximum Suppression](#non-maximum-suppression)
     * [Weighted Boxes Fusion](#weighted-boxes-fusion)
     * [적용과정](#적용과정)
-* [출처](#출처)
+
 * [Reference](#reference)
+* [출처](#출처)
+
+
 
 ## 프로젝트 기간
 - 2021년 05월 10일 ~ 05월 20일(11 days)
@@ -26,9 +29,12 @@
 - 쓰레기 데이터 4109장의 데이터로 학습을 진행했습니다.
 
 
+
 ## Environment
 
 - mmdetection
+
+
 
 ## Models
 
@@ -58,6 +64,8 @@
 - MultiScaleFlipAug
 - Transform - Resize, RandomFlip, Normalize, ImageToTensor, Collect
 
+
+
 ## Ensemble
 
 ### Non maximum Suppression(NMS)
@@ -72,10 +80,7 @@
 - HTC swin Transformer 모델과 NMS를 적용하여 나온 Cascade mask swin base 모델 결과에 각각 weight를 달리하여 WBF 앙상블 수행
 
 
-### 출처
-- FPN : https://eehoeskrap.tistory.com/300 [Enough is not enough]
-- GIoULoss : https://www.tensorflow.org/addons/api_docs/python/tfa/losses/GIoULoss
-- WBF : https://lv99.tistory.com/74
+
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
@@ -83,3 +88,8 @@
 * [DetectoRS: Detecting Objects with Recursive Feature Pyramid and Switchable Atrous Convolution](https://arxiv.org/pdf/2006.02334.pdf)
 * [Aggregated Residual Transformations for Deep Neural Networks](https://arxiv.org/pdf/1611.05431v2.pdf)
 
+
+### 출처
+- FPN : https://eehoeskrap.tistory.com/300 [Enough is not enough]
+- GIoULoss : https://www.tensorflow.org/addons/api_docs/python/tfa/losses/GIoULoss
+- WBF : https://lv99.tistory.com/74
