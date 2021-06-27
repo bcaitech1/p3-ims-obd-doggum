@@ -163,3 +163,4 @@ Segmentation competition의 첫번째 베이스라인의 코드는 VGG를 imagen
 [🧪 P-stage3 seg 실험들 기록](https://htmlpreview.github.io/?https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_seg/test%20history.html)
 
 ## 렙업 레포트
+[pstage3 seg 랩업.pdf](https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_seg/docs/pstage3%20seg%20%EB%9E%A9%EC%97%85.pdf)
