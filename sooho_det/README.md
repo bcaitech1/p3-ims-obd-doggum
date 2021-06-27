@@ -13,7 +13,7 @@
 * [Reference](#reference)
 
 ## 프로젝트 기간
-- 2021년 05월 10일 ~ 05월 20일(10 days)
+- 2021년 05월 10일 ~ 05월 20일(11 days)
 
 ## Object Detection 프로젝트 소개
 - **Object-Detection 프로젝트**는 위치와 해당 객체를 분류하는 Task 입니다.
