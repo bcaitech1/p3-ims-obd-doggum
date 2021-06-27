@@ -217,10 +217,10 @@ python pkl_to_submission.py --pkl work_dirs/faster_rcnn_r50_fpn_1x_trash/epoch_1
 ![img_8.png](imgs/img_8.png)
 
 ## 렙업 레포트
-
+[pstage3 obd 랩업_2.pdf](https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_obd/mmdetection_trash/docs/pstage3%20obd%20%EB%9E%A9%EC%97%85_2.pdf)
 
 ## 피어세션 발표
-
+[P-stage3 obd 발표용.pdf](https://github.com/bcaitech1/p3-ims-obd-doggum/blob/main/sanggeon_obd/mmdetection_trash/docs/P-stage3%20obd%20%EB%B0%9C%ED%91%9C%EC%9A%A9.pdf)
 
 ### reference
 https://github.com/open-mmlab/mmdetection  
