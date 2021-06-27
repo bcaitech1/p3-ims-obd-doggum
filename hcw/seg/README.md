@@ -2,29 +2,17 @@
 
 ## 목차
 
-* [Semantic Segmentation 프로젝트 소개](#semantic-segmentation-프로젝트-소개)
-* [Environment](#environment)
-* [Augmentation](#augmentation)
+
 * [Models](#models)
-    * [DeepLabv3+](#deeplabv3+)
+   * [DeepLabv3+](#deeplabv3+)
+   * [Encoder](#encoder)
+* [Augmentation](#augmentation)
+   * [Train Augmentation](#train-augmentation) 
+* [Ensemble](#ensemble)
+* [실험결과](#실험결과)
 * [Reference](#reference)
+* [출처](#출처)
 
-<br>
-
----
-
-<br>
-
-## 프로젝트 기간
-- 2021년 04월 26일 ~ 05월 06일(11 days)
-
-## Semantic Segmentation 프로젝트 소개
-- **Semantic Segmentation 프로젝트**는 픽셀이 어떤 클래스인지 예측하는 Task 입니다.
-- 쓰레기 데이터 4109장의 데이터로 학습을 진행했습니다.
-
-## 평가 방법
-![image](https://user-images.githubusercontent.com/67626878/123541215-49445c00-d77e-11eb-871a-5bbe579a5146.png)
-- Test Dataset을 대상으로 **mIoU(Mean Intersection over Union)** 로 평가합니다.
 
 <br>
 
