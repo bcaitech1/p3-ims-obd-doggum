@@ -25,6 +25,7 @@
 
 ## Augmentation
 - Augmentation은 다양한 실험을 위해 비교적 학습이 빠른 DeepLabv3+, Mobilenetv2모델을 활용했습니다. 30에폭을 기준으로 잡아서 Val mIoU가 높은 Feature를 추출했습니다. 가장 좋은 효과가 있었던 것은 CLAHE, Horizontal Flip이었습니다.
+
 |Augmentation|Epochs|설정|val loss|val mIoU|
 |---|---|---|---|---|
 |Augmentation 사용 X|17|Normalize, ToTensor|0.3371|0.5040|
@@ -42,6 +43,7 @@
 |CropNonEmptyMaskIfExists|28|(512, 512)|0.3569|0.4979|
 |CropNonEmptyMaskIfExists + Resize|26|(256, 256), (256, 256)|0.3229|0.4671|
 |invertImg|27|defalut|0.3697|0.4973|
+
 ## Models
 
 ### DeepLabv3+
