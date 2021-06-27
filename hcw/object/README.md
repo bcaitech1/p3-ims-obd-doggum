@@ -19,7 +19,11 @@
 * [Reference](#reference)
 * [출처](#출처)
 
+<br>
 
+---
+
+<br>
 
 ## 프로젝트 기간
 - 2021년 05월 10일 ~ 05월 20일(11 days)
@@ -28,7 +32,11 @@
 - **Object-Detection 프로젝트**는 위치와 해당 객체를 분류하는 Task 입니다.
 - 쓰레기 데이터 4109장의 데이터로 학습을 진행했습니다.
 
+<br>
 
+---
+
+<br>
 
 ## Environment
 
@@ -64,7 +72,11 @@
 - MultiScaleFlipAug
 - Transform - Resize, RandomFlip, Normalize, ImageToTensor, Collect
 
+<br>
 
+---
+
+<br>
 
 ## Ensemble
 
@@ -80,7 +92,11 @@
 - HTC swin Transformer 모델과 NMS를 적용하여 나온 Cascade mask swin base 모델 결과에 각각 weight를 달리하여 WBF 앙상블 수행
 
 
+<br>
 
+---
+
+<br>
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
