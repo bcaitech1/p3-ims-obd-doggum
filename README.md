@@ -6,6 +6,14 @@
 | Semantic segmentation  | 2021.04.26 ~ 2021.05.06 | 개껌 | 0.6803 | 0.6561 |
 | Object Detection | 2021.05.10 ~ 2021.05.20 | 개껌 | 0.5878 | 0.4771 |
 
+## Member
+- [김수호](https://github.com/Sooho-Kim)
+- [이상건](https://github.com/sglee487)
+- [이승현](https://github.com/shlee4290)
+- [이정환](https://github.com/JeonghwanLee1)
+- [조영민](https://github.com/joqjoq966)
+- [홍채원](https://github.com/hcw3737)
+
 # Semantic Segmentation
 
 ## 목차
