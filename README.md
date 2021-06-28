@@ -14,7 +14,9 @@
 * [Environment](#environment)
 * [Augmentation](#augmentation)
 * [Models](#models)
-    * [DeepLabv3+](#deeplabv3+)
+    * [DeepLabv3+](#deeplabv3+)  
+* [Test Time Augmentation](#test-time-augmentation)
+* [Scheduler](#scheduler)
 * [Reference](#reference)
 
 ## 프로젝트 기간
@@ -55,8 +57,15 @@
 ## Models
 
 ### DeepLabv3+
+
+#### Encoder
 - ?
 
+## Test Time Augmentation
+- ?
+
+## Scheduler
+- ?
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
@@ -75,6 +84,7 @@
     * [DetectoRS](#detectors)
 * [Post-processing](#post-processing)
     * [Non-maximum Suppression](#non-maximum-suppression)
+    * [Weighted boxes fusion](#weighted-boxes-fusion)
 * [Reference](#reference)
 
 ## 프로젝트 기간
@@ -114,6 +124,7 @@
 ![image](https://user-images.githubusercontent.com/67626878/123540929-6e37cf80-d77c-11eb-8383-57cdc7c28ab6.png)
 - NMS는 불 필요한 박스들을 IoU를 기준으로 합쳐주는 방법으로, 앙상블 이전에 최대한 후처리하고 앙상블을 진행했습니다.
 
+### Weighted boxes fusion
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
