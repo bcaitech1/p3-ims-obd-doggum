@@ -42,6 +42,8 @@
 ![image](https://user-images.githubusercontent.com/67626878/123541215-49445c00-d77e-11eb-871a-5bbe579a5146.png)
 - Test Dataset을 대상으로 **mIoU(Mean Intersection over Union)** 로 평가합니다.
 
+<br>
+
 ## Environment
 - ?
 
@@ -74,6 +76,8 @@
 
 #### Encoder
 - ?
+
+<br>
 
 ## Test Time Augmentation
 - ?
@@ -142,6 +146,8 @@
 
 ### DetectoRS
 - Backbone으로 ResNext101_32x4d 모델을 활용했으나, Swin-Transformer에 비해 성능이 좋지 않고 학습 속도도 느려 최종 모델로 활용하지 않았습니다.
+
+<br>
 
 ## Post-processing
 
