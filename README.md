@@ -66,6 +66,8 @@
 |CropNonEmptyMaskIfExists + Resize|26|(256, 256), (256, 256)|0.3229|0.4671|
 |invertImg|27|defalut|0.3697|0.4973|
 
+<br>
+
 ## Models
 
 ### DeepLabv3+
@@ -122,6 +124,8 @@
 ## Environment
 
 - mmdetection
+
+<br>
 
 ## Models
 
