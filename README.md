@@ -14,6 +14,8 @@
 - [조영민](https://github.com/joqjoq966)
 - [홍채원](https://github.com/hcw3737)
 
+<br>
+
 # Semantic Segmentation
 
 ## 목차
@@ -33,6 +35,8 @@
 ## Semantic Segmentation 프로젝트 소개
 - **Semantic Segmentation 프로젝트**는 픽셀이 어떤 클래스인지 예측하는 Task 입니다.
 - 쓰레기 데이터 4109장의 데이터로 학습을 진행했습니다.
+
+<br>
 
 ## 평가 방법
 ![image](https://user-images.githubusercontent.com/67626878/123541215-49445c00-d77e-11eb-871a-5bbe579a5146.png)
@@ -75,6 +79,8 @@
 ## Scheduler
 - ?
 
+<br>
+
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
 
@@ -107,6 +113,8 @@
 - **Object-Detection 프로젝트**는 위치와 해당 객체를 분류하는 Task 입니다.
 - 쓰레기 데이터 4109장의 데이터로 학습을 진행했습니다.
 
+<br>
+
 ## 평가 방법
 ![image](https://user-images.githubusercontent.com/67626878/123540325-5dd22580-d779-11eb-90a8-a9f8990f1143.png)
 - Test Dataset을 대상으로 **mAP50(Mean Average Precision)** 로 평가합니다.
@@ -138,6 +146,8 @@
 - NMS는 불 필요한 박스들을 IoU를 기준으로 합쳐주는 방법으로, 앙상블 이전에 최대한 후처리하고 앙상블을 진행했습니다.
 
 ### Weighted boxes fusion
+
+<br>
 
 ## Reference
 * [Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/abs/2103.14030.pdf)
