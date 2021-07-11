@@ -3,8 +3,8 @@
 ## Summary
 | Task | Date | Team | Public LB | Private LB |
 |---:|---:|---:|---:|---:|
-| [Semantic segmentation](#semantic-segmentation)| 2021.04.26 ~ 2021.05.06 | 개껌 | 0.6803 | 0.6561 |
-| [Object Detection](#object-detection)| 2021.05.10 ~ 2021.05.20 | 개껌 | 0.5878 | 0.4771 |
+| [Semantic segmentation](#semantic-segmentation)| 2021.04.26 ~ 2021.05.06 | 개껌 | 0.6803(8등) | 0.6561(11등) |
+| [Object Detection](#object-detection)| 2021.05.10 ~ 2021.05.20 | 개껌 | 0.5878(9등) | 0.4771(6등) |
 
 ## Member
 - [김수호](https://github.com/Sooho-Kim)
